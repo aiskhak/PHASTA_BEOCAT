@@ -1,0 +1,23 @@
+SUBSYSNAME := phasta/phPost/EnerSpectra
+MODULENAME := EnerSpectra
+ISEXECUTABLE := 1
+OUTNAME :=correlationX.exe
+
+dirs := src
+DEPS := $(DEPS) phasta/phastaIO
+LIBS := phastaIO
+
+	ifeq ($(ARCHOS), )
+	    ARCHOS := $(shell $(DEVROOT)/Util/buildUtil/getarch)
+	endif
+
+	ifeq ($(ARCHOS),sun4_5)
+		DEFS := $(DEFS) -Dsun4_5 -DACUSIM_SUN
+	       LDFLAGS := -lfsu -lfai2 -lfsumai -lfminlai -lfminvai \
+                  -lfmaxvai -lfmaxlai -lF77 -lsunmath -lthread \
+                  -lsocket -lnsl -lrt -lnsl -laio  -lsunperf -lmvec
+	endif
+
+include $(DEVROOT)/Util/buildUtil/make.common
+
+

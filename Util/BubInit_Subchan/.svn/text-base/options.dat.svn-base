@@ -1,0 +1,22 @@
+!The Geometry Type (Sub or 2x2)
+Sub
+!NUMBER OF BUBBLES
+262
+!BUBBLE RADIUS
+3.254634E-04
+!BOX DIMENSIONS (streamwise range, and cross section range of a single subchannel)
+-0.02025, 0.02025, -0.0063, 0.0063, -0.0063, 0.0063
+!The range of mixing vanes region
+5E-05, 0.038685
+!Radius of Subchannel
+0.00457
+!MINIMUM ALLOWABLE DISTANCE BETWEEN BUBBLES
+0.00203740088
+!MIRROR GHOST BUBBLES REGION (SPECIFY THE DISTANCE TO THE WALLS IN **%)
+15	!%
+!Void Fraction Resolution in x direction
+200
+!Void fraction resolution in y direction
+200
+!void fraction resolution in z direction
+200

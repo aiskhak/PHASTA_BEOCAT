@@ -1,0 +1,1 @@
+ifort -debug inline-debug-info -ccdefault none -fixed -132 -o Runme_bct_partition bct_partition.f

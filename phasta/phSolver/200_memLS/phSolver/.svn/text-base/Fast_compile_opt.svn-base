@@ -1,0 +1,5 @@
+# source intel_mpich2_hydra
+# source envLnux90.csh
+#gmake VERS=opt VERSION=200_memLS clean
+#gmake VERS=opt VERSION=200_memLS setup
+gmake VERS=opt VERSION=200_memLS 

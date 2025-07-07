@@ -1,0 +1,4 @@
+gmake MODELER=discrete clean
+gmake MODELER=discrete setup
+gmake MODELER=discrete 
+

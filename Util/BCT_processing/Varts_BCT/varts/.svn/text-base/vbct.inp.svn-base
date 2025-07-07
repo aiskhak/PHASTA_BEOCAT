@@ -1,0 +1,17 @@
+
+
+
+
+
+Start Simulation Time, End Simulation Time:
+        0
+        5.58
+Deltat
+        0.565
+phdt
+        6.670E-4
+Start Time Step, End Time Step
+        0
+        8400
+ioverlap to expand timestep range for slight overlap
+        20 

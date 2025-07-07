@@ -1,0 +1,23 @@
+ifeq ($(MPIHOME),)
+    # modify below path to mpi.h
+    #MPIHOME := /usr/local/mpich/latest
+    MPIHOME := /usr/include/mpich-x86_64
+endif
+
+ifeq ($(MPICOMM),)
+#  MPICOMM := ch_p4
+  MPICOMM :=
+endif
+
+# modify below path to mpi.h
+#INCLUDES := $(INCLUDES) -I$(MPIHOME)/$(MPICOMM)/include
+INCLUDES := -I$(MPIHOME)
+
+DEFS := $(DEFS) -DUSE_STDARG -DHAVE_STDLIB_H=1 -DHAVE_STRING_H=1 -DHAVE_UNISTD_H=1 -DHAVE_STDARG_H=1 \
+	-DUSE_STDARG=1 -DMALLOC_RET_VOID=1 -DMPI -DMPICH_SKIP_MPICXX
+
+# modify below path to libmpicxx, libmpifort
+#MPLIB = $(call libtmpl,$(MPIHOME)/$(MPICOMM)/lib) -lmpich $(MPICH2_SYS_LIBS)
+MPLIB = $(call libtmpl, /usr/lib64/mpich/lib/) -lmpich $(MPICH2_SYS_LIBS)
+
+# -lpmpich

@@ -1,0 +1,419 @@
+      program main
+
+      integer, allocatable :: imap(:), invmap(:), mapb(:)
+
+      real*8,  allocatable :: qold(:,:), qstr(:,:), qsta(:,:), 
+     &                        xyz(:,:), qread(:,:), y(:), 
+     &                        p(:,:,:), temp(:,:,:), gvelavg(:,:),
+     &                        ur(:,:,:), vr(:,:,:), wr(:,:,:),
+     &                        Ruu(:,:,:), dz(:),
+     &                        CorrUU(:), CorrVV(:), CorrWW(:),
+     &                        sumRuu(:),sumRvv(:),sumRww(:) 
+!MR CHANGE     
+      real*8,  allocatable :: sts_ui(:,:)
+      real*8   sts_x,sts_y,sts_v,sts_w
+      integer  ifirststs,ilaststs    
+!MR CHANGE  
+     
+      integer      numnp, nshg, i, j, k, itmp,itmp0, nsteps,
+     &             fkmap, iorig, ilastf, nstepst, ynum,
+     &             Nx, Ny, Nz, e, M, nx1, ny1, nz1,
+     &             isize, nitems, irstin, ifirst,ilast,istep,
+     &             itmpF, itmpL, t, numfiles, n, itmp6,
+     &             itmpFN, itmpLN
+
+      real*8       Lx, Lz, utausq, S0u, S0v, S0w
+ 
+      character*30 fname1,fmt1, fnamer, fname2, fmt2,
+     &        fname3, fmt3, fname4, fmt4, fname5, fmt5,
+     &        fname6, fmt6, fname7, fmt7, fname8, fmt8
+!MR CHANGE     
+      character*80 iotype
+!MR CHANGE     
+      integer      nnp, nsd
+      integer iarray(50)
+      character*10 cname
+      character*1  dash
+
+      dash='-'
+c**********************************************************
+c     
+c.... read the time averaged data
+c     
+      write(*,*) 'enter nx, ny, nz, Lx, Lz, utausq, ynum'
+      read(*,*) Nx1, Ny1, Nz1, Lx, Lz, utausq, ynum
+      write(*,*) 'first time steps '
+      read(*,*) ifirst
+      write(*,*) 'last time steps '
+      read(*,*) ilast
+      write(*,*) 'step'
+      read(*,*) istep
+!MR CHANGE      
+      write(*,*) 'first time steps for sts* files'
+      read(*,*) ifirststs
+      write(*,*) 'last time steps for sts* files'
+      read(*,*) ilaststs
+!MR CHANGE  
+
+        nx=Nx1-1
+        ny=Ny1-1
+        nz=Nz1-1
+
+c**************************************************************
+
+        n = ilast-ifirst
+        numfiles = (n/istep)+1
+        numnp = (nx+1)*(ny+1)*(nz+1)
+
+
+c
+c.... read coordinates from geom.old
+c
+    
+      open (unit=33,file='geom.old',status='unknown')
+      read (33,*) nnp, nsd
+      allocate (xyz(nnp,3))
+      do i = 1, nnp
+         read (33,*) j, j, xyz(i,1), xyz(i,2), xyz(i,3)
+      enddo
+      close (33)
+
+c***********************************************************
+!MR CHANGE      
+      allocate (y(Ny1))
+      allocate (sts_ui(Ny1,3)) ; sts_ui=0.d0
+      if (ifirststs.gt.0) itmpF = int(log10(float(ifirst)))+1
+      if  (ilaststs.gt.0) itmpL = int(log10(float(ilast))) +1
+
+      write (fmt3,
+     &     "('(''sts_ui.'',i',i1,',a1,i',i1,',1x)')")
+     &     itmpF,itmpL
+      write (fname3,fmt3) ifirststs,dash,ilaststs
+      fname3 = trim(fname3)
+      open (unit=37, file=fname3, status='unknown' ) 
+      do i=1,Nx1-1
+      do j = 1,Ny1
+         read(37,*)  sts_x,sts_x,sts_u,sts_v,sts_w
+	 if(i==1) y(j)=sts_y
+	 sts_ui(j,1)=sts_ui(j,1)+sts_u
+	 sts_ui(j,2)=sts_ui(j,2)+sts_v
+	 sts_ui(j,3)=sts_ui(j,3)+sts_w
+      enddo
+      enddo
+      close(37)
+      sts_ui(:,:)=sts_ui(:,:)/(Nx1-1)
+
+
+!           open (unit=50,file='yi',status='unknown')
+!           allocate (y(Ny1))
+!           do j = 1, Ny1
+!             read (50,*) y(j)
+!           enddo 
+!           close (50)
+	  
+!MR CHANGE
+c******************************************************************
+      
+       e = ifirst
+
+       do t = 1, numfiles
+
+        print*, 'the number = ', t
+
+ 200  allocate (imap(numnp), invmap(numnp), mapb(numnp) )
+      allocate (qold(numnp,5))
+      allocate (qstr(numnp,5))
+      allocate (qread(numnp,5))
+      allocate (qsta(ny+1,5))
+       
+      qstr=0.0
+      ilastf=0
+
+c****************************************************************
+      itmp = 1
+      if (e .gt. 0)  itmp  = int(log10(float(e)))+1
+c     
+      write (fmt1, "('(''restart.'',i',i1,',1x)')") itmp
+      write (fname1,fmt1) e
+
+      fname1 = trim(fname1) // '.0'
+      call openfile(  fname1,  'read?', irstin )
+      fnamer = 'solution'
+      nitems = 3
+!MR CHANGE      
+      iotype='binary'
+!MR CHANGE    
+      call readheader (irstin, fnamer, iarray, nitems, 
+     &     'integer', iotype)
+
+      nshg = iarray(1)    
+      numvar = iarray(2)
+      nstepst = iarray(3)
+      isize = nshg*numvar
+      nsteps=nsteps+nstepst
+     
+      call readdatablock (irstin, fnamer, qread, isize, 'double',iotype)
+
+      qold(1:nshg,:)=qread(1:nshg,:)
+      qstr=qstr+qold
+      ilastf=max(ilastf,e)
+      e=ilastf
+      qold=qstr
+      
+c
+c.... read the mapping file to get from mesh-database to (i,j,k)
+c     numbering
+c
+      fkmap = 18
+      open(fkmap,file='geom.kmap',status='unknown')
+      do i=1,numnp
+         read(fkmap,*) iorig
+         imap(i)=iorig+1  ! imap takes arguement of original and returns new
+         invmap(iorig+1)=i
+      enddo 
+      close(fkmap)
+c
+c.... convert to original structured numbering (i,j,k) (and time average)
+c
+      do i = 1, numnp
+         qstr(i,:) = qold(invmap(i),:)
+      enddo
+
+c      do i = 1, numnp
+c         qstr(i,:) = qold(invmap(i),:)/real(nsteps,8)
+c      enddo
+
+c********************************************************************
+      deallocate(qread)
+      deallocate(qold)
+      deallocate(imap)
+      deallocate(invmap)
+      deallocate(mapb)
+      deallocate(qsta)
+
+      machine = "sun"
+      
+      WRITE(*,*)" Writing ASCII file "
+      WRITE(*,*)" "
+
+      OPEN(868,FILE='ascii_qstr')
+cc      WRITE(868,*)" machine  nshg  e  "
+      WRITE(868,*) machine, nshg, e
+      DO I=1, nshg
+         WRITE(868,"(5(F24.8))")(qstr(I,J),J=1,5)
+      ENDDO
+      
+      CLOSE(868)
+
+      deallocate(qstr)
+c****************************************************************
+      machine = "sun"
+      
+
+      WRITE(*,*)" Reading ASCII file "
+      WRITE(*,*)" "
+
+      open (unit=34,file='ascii_qstr',status='unknown')
+ 
+      read (34,*) M, nshg, e
+
+      allocate (ur(nx+1,ny+1,nz+1))
+      allocate (vr(nx+1,ny+1,nz+1))
+      allocate (wr(nx+1,ny+1,nz+1))
+      allocate (p(nx+1,ny+1,nz+1))
+      allocate (temp(nx+1,ny+1,nz+1))
+
+      do i=1, nx+1
+         do j=1, ny+1
+            do k= nz+1, 1, -1
+            
+         read(34,*) p(i,j,k), ur(i,j,k), vr(i,j,k), wr(i,j,k), 
+     &                    temp(i,j,k)
+                   
+            enddo
+         enddo
+      enddo
+      close (34)
+
+c********************************************************************    
+!MR CHANGE
+!       open (unit=40,file='ui',status='unknown')
+!       allocate (gvelavg(3,ny+1))
+!       do j = 1, ny+1 
+!          read (40,*) gvelavg(1,j), gvelavg(2,j), gvelavg(3,j)
+!       enddo
+!       close (40)
+
+      allocate (gvelavg(3,ny+1))
+      do j = 1, ny+1 
+         gvelavg(1,j)=sts_ui(j,1)
+	 gvelavg(2,j)=sts_ui(j,2)
+	 gvelavg(3,j)=sts_ui(j,3)
+      enddo
+!MR CHANGE
+
+c************************************************************
+        allocate (Ruu(3,ny+1,nz+1))
+        Ruu = 0.0d0
+
+      call Correlation(gvelavg,ur,vr,wr,Lx,Lz,
+     &                nx,ny,nz,
+     &                utausq,Ruu,ynum,t)
+
+c**************************************************************
+              deallocate(ur)    
+              deallocate(vr)
+              deallocate(wr)
+              deallocate(Ruu)
+              deallocate(temp)
+              deallocate(p)
+              deallocate(gvelavg)   
+          
+            e = e + istep
+
+         enddo    ! by t
+
+c***************************************************************
+         allocate(sumRuu(Nz1))
+         allocate(sumRvv(Nz1))
+         allocate(sumRww(Nz1))
+         allocate(dz(Nz1))
+c**************************************************************
+        dz = 0.0d0
+
+         WRITE(*,*)" Reading dz file "
+         WRITE(*,*)" "
+         
+         t = 1
+
+      if (t .gt. 0) itmp6 = int(log10(float(t)))+1
+           
+      write (fmt6,"('(''Zcorrelation.'',i',i1,',1x)')") itmp6
+      write (fname6,fmt6) t  
+      fname6 = trim(fname6)
+      open (unit=900, file=fname6, status='unknown' )
+           
+         do k = 1, nz+1   
+
+          read(900,999) dz(k),dd,dd,dd
+
+         enddo
+         
+         close(900)
+
+c*****************************************************************
+            sumRuu = 0.0d0
+            sumRvv = 0.0d0
+            sumRww = 0.0d0
+
+          do t = 1, numfiles
+
+           allocate(CorrUU(Nz1))
+           allocate(CorrVV(Nz1))
+           allocate(CorrWW(Nz1))
+
+           CorrUU = 0.0d0
+           CorrVV = 0.0d0
+           CorrWW = 0.0d0
+
+c***************************************************************
+         WRITE(*,*)" Reading Correlation file "
+         WRITE(*,*)" "
+     
+      if (t .gt. 0) itmp = int(log10(float(t)))+1
+         
+      write (fmt5,"('(''Zcorrelation.'',i',i1,',1x)')") itmp
+      write (fname5,fmt5) t
+      fname5 = trim(fname5)
+      open (unit=600, file=fname5, status='unknown' )
+
+         do k = 1, nz+1
+
+          read(600,999) dd,CorrUU(k),CorrVV(k),CorrWW(k)               
+
+         enddo
+
+         close(600)
+
+c**************************************************************
+
+           do k = 1, nz+1
+            
+              sumRuu(k) = sumRuu(k) + CorrUU(k)
+              sumRvv(k) = sumRvv(k) + CorrVV(k)
+              sumRww(k) = sumRww(k) + CorrWW(k)
+
+           enddo
+
+          deallocate(CorrUU)
+          deallocate(CorrVV)
+          deallocate(CorrWW)
+         
+         enddo            ! by t
+
+          sumRuu = sumRuu/numfiles
+          sumRvv = sumRvv/numfiles
+          sumRww = sumRww/numfiles
+
+c**************************************************************
+         WRITE(*,*)" Writing Final Z-Correlation file "
+         WRITE(*,*)" "
+
+      if (ifirst.gt.0) itmpF = int(log10(float(ifirst)))+1
+      if  (ilast.gt.0) itmpL = int(log10(float(ilast))) +1
+
+      write (fmt3,
+     &     "('(''Z-SumCorrel.'',i',i1,',a1,i',i1,',1x)')")
+     &     itmpF,itmpL
+      write (fname3,fmt3) ifirst,dash,ilast
+      fname3 = trim(fname3)
+      open (unit=700, file=fname3, status='unknown' ) 
+      
+      do k = 1,nz+1
+         
+         write(700,999) dz(k),sumRuu(k),sumRvv(k),sumRww(k)
+         
+      enddo
+      close(700)
+c****************************************************************
+      S0u = sumRuu(1)
+      S0v = sumRvv(1)
+      S0w = sumRww(1)
+
+         sumRuu =  sumRuu/S0u
+         sumRvv =  sumRvv/S0v
+         sumRww =  sumRww/S0w
+         
+c**************************************************************
+         WRITE(*,*)" Writing Final Z-Correlation Normalized file "
+         WRITE(*,*)" "
+
+      if (ifirst.gt.0) itmpFN = int(log10(float(ifirst)))+1
+      if (ilast.gt.0) itmpLN = int(log10(float(ilast))) +1
+          
+      write (fmt4,
+     &     "('(''Z-SumNorCorr.'',i',i1,',a1,i',i1,',1x)')")
+     &     itmpFN,itmpLN
+      write (fname4,fmt4) ifirst,dash,ilast
+      fname4 = trim(fname4)
+      open (unit=800, file=fname4, status='unknown' )
+           
+      do k = 1,nz+1
+          
+         write(800,999) dz(k),sumRuu(k),sumRvv(k),sumRww(k)
+          
+      enddo
+      close(800)
+      
+!MR CHANGE
+      deallocate (sts_ui)
+!MR CHANGE  
+c****************************************************************
+
+ 999     format(1x,4e18.8)
+      end
+        
+	
+
+
+

@@ -1,0 +1,30 @@
+ SIM_LICENSE_FILE is set : /net/common/meshSim/license/license.txt
+
+ 
+ Reading mesh from files : 
+   source mesh : ./geom.sms
+   dest.  mesh : ./geom.sms
+
+ Reading solution from file : 
+   source solution : ./restart_src.10000.1
+   source idmap    : ./idmap.dat
+
+ M2M solution transfer begin...
+
+ ...using octree to find regions (works only for tets. in source mesh)
+
+ Enter data structure level to be used
+ (1 is max. resolution leading to less search time)
+ (typically between 1-5)
+ 
+ Enter info. for entities to be considered [num. ents.=1] : 
+ (example, for an entity three values are needed - 92 2 0)
+ (where, 92 is entity-tag for specific entity, 2 is entity-dimension for model-face with tag 92 and 0 is closure-flag set to OFF)
+ 
+
+ M2M solution transfer done...
+
+ Writing solution to file : 
+   dest.  solution   : ./restart_dest.10000.1
+   dest.  idmap used : ./idmap.dat
+
