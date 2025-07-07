@@ -254,7 +254,7 @@ c... The comparing process works here
                lenseg = ilwork (itkbeg + 4 + 2*is)
                isgend = isgbeg + lenseg - 1
                do imrk = isgbeg,isgend,1
-                 if (global(imrk,idof).lt.rtemp(itemp+imrk-isgbeg,jdl)) then
+             if (global(imrk,idof).lt.rtemp(itemp+imrk-isgbeg,jdl)) then
                     global(imrk,idof) = rtemp(itemp+imrk-isgbeg,jdl)
                  endif
                enddo

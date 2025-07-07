@@ -245,14 +245,15 @@ c		write(*,*) 'myrank, sid = ', myrank, sid
                     write(filenum,'(i6.6)')myrank
                  else if(myrank.ge.1000000 .and. myrank.le.9999999)then
                     write(filenum,'(i7.7)')myrank
-                 else if(myrank.ge.10000000 .and. myrank.le.99999999)then
+                else if(myrank.ge.10000000.and.myrank.le.99999999)then
                     write(filenum,'(i8.8)')myrank
-                 else if(myrank.ge.100000000 .and. myrank.le.999999999)then
+            else if(myrank.ge.100000000 .and. myrank.le.999999999)then
                     write(filenum,'(i9.9)')myrank
-                 else if(myrank.ge.1000000000 .and. myrank.le.9999999999)then
+           else if(myrank.ge.1000000000 .and. myrank.le.9999999999)then
                     write(filenum,'(i10.10)')myrank
                  end if
-                open(93+myrank,file='../bct.dat.'//trim(filenum)//'',status='replace')
+           open(93+myrank,file='../bct.dat.'//trim(filenum)//'',
+     &status='replace')
 		   inew = 0
 		 end if
                    

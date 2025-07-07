@@ -194,17 +194,18 @@ c... Contact Angle Mengnan
                 delta_const_min=-40
                 CA_alpha = 0.2  ! Relaxation factor
 
-               offset_low=(1/2-1/3.141*atan((delta_low-mid_low)/stretch))
+              offset_low=(1/2-1/3.141*atan((delta_low-mid_low)/stretch))
 !offset along the y axis to ensure continuity of the contact fforce funciton
 
-               offset_high=(1/2+1/3.141*atan((delta_high-mid_high)/stretch))
+           offset_high=(1/2+1/3.141*atan((delta_high-mid_high)/stretch))
 
               ! Cavities location
               !if (lstep.eq.4500) then
               !if (myrank.eq.master) write(*,*) 'Assign sites locations '
               site_loct(:) = 0.d0
               do i = 1, npro
-                   if ((xx(i,2).ge.2.85d-3).or.(xx(i,2).le.0.15d-3)) then
+                   if ((xx(i,2).ge.2.85d-3).or.
+     &(xx(i,2).le.0.15d-3)) then
                       site_loct(i) = 1.d0
                    endif
               !    ! #1 and #3
@@ -471,7 +472,7 @@ c
 c!....Temperature gradient calculation --Mengnan 9/4/2015......................!
        if (bubboil.eq.1.0d0.or.bubgrow.eq.1.0d0)then
 !       write(*,*)"I'm here"
-        call Bubheatflux(yl, shpfun,  shg, elemvol_local,Tempb, gytemp,bml)
+        call Bubheatflux(yl,shpfun,shg,elemvol_local,Tempb, gytemp,bml)
 
 !        do i = 1,npro
 !        do n = 1,nshl
@@ -769,7 +770,8 @@ c ...   Contact Angle Mengnan  --------------------------------------------
  
             do n = 1, nshl
                 !if ((bml(i,n,1).gt.0.d0).and.() then
-                if ((bml(i,n,1).gt.0.d0).and.(site_loct(i).eq.1.d0)) then
+                if ((bml(i,n,1).gt.0.d0).and.
+     &(site_loct(i).eq.1.d0)) then
             !if ((xx(i,2).lt.0.d0).or.(xx(i,2).gt.2.8d-3)) then
                 eps_thick = epsilon_ls_tmp*1.4d0
                 eps_height = epsilon_ls_tmp*1.4d0
@@ -838,12 +840,14 @@ c_______________________________________________________________________________
 
               if (delta_contact.le.delta_low) then ! push interface in
                  F_app=(1.d0/(eps_thick*eps_height**3))*CA_constant*
-     &                 (-1.0/2.0+1.0/3.141*atan((delta_contact-mid_low)/stretch)
+     &                 (-1.0/2.0+1.0/3.141*atan((delta_contact-mid_low)
+     &/stretch)
      &                 +offset_low)*cos(sclr(i)*3.141/2.0/(eps_thick))
      &                 *(eps_height-dist2w(i))**2.0*rho(i)
               elseif(delta_contact.ge.delta_high) then ! pull interface out
                  F_app=(1.d0/(eps_thick*eps_height**3))*CA_constant*
-     &                 (1.0/2.0+1.0/3.141*atan((delta_contact-mid_high)/stretch)
+     &                 (1.0/2.0+1.0/3.141*atan((delta_contact-mid_high)
+     &/stretch)
      &                  -offset_high)*cos(sclr(i)*3.141/2.0/(eps_thick))
      &                  *(eps_height-dist2w(i))**2.0*rho(i)
                !write(*,*) 'TH^3',
@@ -1128,9 +1132,9 @@ c!       enddo                                                         !Farhad
 !                BubForce = datmat(1,2,1)*VelMag*BubRad*(A11/dist2w(i)+B11/(dist2w(i)**2.0))   ! 1/d2 dependence is added here
 !              write(*,*) 'myrank, i, dist2w, BubForce = ', myrank, i, dist2w(i), BubForce, BubRad
                 if (dist2w(i).ne.0.d0) then
-                SurfDPind(i,1) = -1.0E0*BubForce*x2w(i)/dist2w(i) *rho(i)   !   A negative since is needed since the force
-                SurfDPind(i,2) = -1.0E0*BubForce*y2w(i)/dist2w(i) *rho(i)   !   is acting away from the wall whilst
-                SurfDPind(i,3) = -1.0E0*BubForce*z2w(i)/dist2w(i) *rho(i)   !   the normal vector is directed towards the wall
+               SurfDPind(i,1) = -1.0E0*BubForce*x2w(i)/dist2w(i) *rho(i)!   A negative since is needed since the force
+               SurfDPind(i,2) = -1.0E0*BubForce*y2w(i)/dist2w(i) *rho(i)!   is acting away from the wall whilst
+               SurfDPind(i,3) = -1.0E0*BubForce*z2w(i)/dist2w(i) *rho(i)!   the normal vector is directed towards the wall
                 endif
 !	  if (myrank.eq.16.and.i.gt.800) write(*,*) 'mr, i, y2w, SurfDPind, sforce', myrank, i, y2w(i), SurfDPind(i,2), sforce(i,2)*rho(i)
 ! Increase surface tension in this region as well:

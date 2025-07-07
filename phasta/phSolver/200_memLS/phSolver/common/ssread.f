@@ -84,7 +84,8 @@ c
       end if
 
       if(myrank.eq.master) then 
-        write(*,*) 'Locate the geombc.dat and restart.dat of timestep', irstart
+        write(*,*) 'Locate the geombc.dat and restart.dat of timestep',
+     &irstart
         write(*,*) 'Path of restart file', fnamer, fnamelr
       endif
 c

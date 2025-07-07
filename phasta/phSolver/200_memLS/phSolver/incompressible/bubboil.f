@@ -23,7 +23,8 @@
 !
 !-------------------------------------------------------------------------------
 
-        subroutine Bubvolgenera(dVolume, shell_num,bml,sclr_ls,elemvol_local) 
+        subroutine Bubvolgenera(dVolume, shell_num,bml,
+     &sclr_ls,elemvol_local) 
 !-------------------------------------------------------------------------------
 !
 !	This subroutine is calculated the volume generation term during boiling
@@ -35,9 +36,10 @@
 !        use bubboil_info       
         include "common.h"
 
-        dimension dVolume(npro), elem_shell_num(100,2), bubvol(100), R(100)
-        dimension R_1(npro), B_factor(100), shell_num(npro),sclr_ls(npro)
-        dimension bml(npro,nshl,1), bubdVolume(npro,100),elemvol_local(ibksiz)
+        dimension dVolume(npro),elem_shell_num(100,2),bubvol(100),R(100)
+        dimension R_1(npro),B_factor(100),shell_num(npro),sclr_ls(npro)
+        dimension bml(npro,nshl,1),bubdVolume(npro,100),
+     &elemvol_local(ibksiz)
         dimension R_0(npro), shell_num_old(npro), shell_num_new(npro)
 
         integer i, j
@@ -135,7 +137,8 @@
      &    (sclr_ls(j).LT.2.0E0*epsilonBT)) then
               do n = 1, nshl
 !                if(INT(bml(j,n,1)).eq.i) then
-                if((INT(bml(j,n,1)).eq.i).or.(INT(bml(j,n,1)).eq.(3*i_num_bubbles+i)))then
+                if((INT(bml(j,n,1)).eq.i).or.
+     &(INT(bml(j,n,1)).eq.(3*i_num_bubbles+i)))then
 !               specially for single nucleation site
                  dVolume(j) = bubdVolume(j,i)*Rho_v/Rho_l
                  shell_num(j) = elem_shell_num(i,2)
@@ -145,7 +148,8 @@
      &    (sclr_ls(j).LT.-1.0E0*epsilon_ls_tmp)) then
               do n = 1, nshl
 !                if(INT(bml(j,n,1)).eq.i) then
-                if((INT(bml(j,n,1)).eq.i).or.(INT(bml(j,n,1)).eq.(3*i_num_bubbles+i)))then
+                if((INT(bml(j,n,1)).eq.i).or.
+     &(INT(bml(j,n,1)).eq.(3*i_num_bubbles+i)))then
 !               specially for single nucleation site
                  dVolume(j) = bubdVolume(j,i)
                  shell_num(j) = elem_shell_num(i,1)
@@ -177,7 +181,8 @@
 c===============================================================================
 c===============================================================================
 
-        subroutine Bubheatflux(yl, shpfun, shg, elemvol_local,Tempb, gytemp,bml)
+        subroutine Bubheatflux(yl, shpfun, shg, elemvol_local,Tempb,
+     &gytemp,bml)
 !-------------------------------------------------------------------------------
 !
 !	This subroutine is used to calculated total heat flux flowing into bubb-
@@ -244,7 +249,8 @@ c
 
              do n = 1, nshl
 !                if(INT(bml(i,n,1)).eq.k) then
-                if((INT(bml(i,n,1)).eq.k).or.(INT(bml(i,n,1)).eq.(3*i_num_bubbles+k)))then
+                if((INT(bml(i,n,1)).eq.k).or.
+     &(INT(bml(i,n,1)).eq.(3*i_num_bubbles+k)))then
 !               specially for single nucleation site
                 R_0(i)=(((3.0E0/4.0E0)*bubvol(k))/pi)
                 R_0(i)=(R_0(i))**(1.0d0/3.0d0)
@@ -299,8 +305,8 @@ c
      &   +gytemp(i,3)*gyti(i,3))
 !           gytemp(i,5)=gytemp(i,4)*((R_1(i)/R_0(i))**2.0)*elemvol_local(i)/
 !     &       (pi*R_0(i)*R_0(i)*epsilonBT)
-           gytemp(i,5)=gytemp(i,4)*((R_1(i)/R_0(i))**2.0)*elemvol_local(i)/
-     &       (pi*R_0(i)*R_0(i)*epsilonBT)
+           gytemp(i,5)=gytemp(i,4)*((R_1(i)/R_0(i))**2.0)
+     &*elemvol_local(i)/(pi*R_0(i)*R_0(i)*epsilonBT)
             
 
            else

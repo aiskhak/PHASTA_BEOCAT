@@ -23,7 +23,7 @@ export MPICH_LIB=${I_MPI_ROOT}/lib
 export FQLIBS=""
 ls $MPICH_INC $MPICH_LIB
 
-export SIMMODELER_ROOT="/homes/aiskhak/SimModeler/2025.1-250623dev"
+export SIMMODELER_ROOT="/homes/aiskh/SimModeler/2025.1-250623dev"
 export SIMLIB_DIR="${SIMMODELER_ROOT}/lib/x64_rhel9_gcc11"
 export PSDK_LIB="${SIMLIB_DIR}/psKrnl"
 export LD_LIBRARY_PATH="${SIMLIB_DIR}:${PSDK_LIB}:${LD_LIBRARY_PATH}"

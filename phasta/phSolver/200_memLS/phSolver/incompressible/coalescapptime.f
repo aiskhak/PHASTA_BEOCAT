@@ -61,7 +61,8 @@ c!....active for each different event
                  do k2 = 1, coalest
                     if ((avgcoorddist(k1,k2).lt.coalbubrad).and.
      &                 (event_tag(k1,k2).eq.0)) then
-                       app_time(k2,1) = app_time(k1,2) + itrtimestp/2.0d0
+                       app_time(k2,1) = app_time(k1,2) +
+     & itrtimestp/2.0d0
                        event_tag(k1,:) = 1
                        event_tag(:,k2) = 1
                        coalcon_rem(k1) = 0
@@ -106,7 +107,8 @@ c!....active for each different event
                  do k2 = 1, coalest
                     if ((avgcoorddist(k1,k2).lt.coalbubrad).and.
      &                 (event_tag(k1,k2).eq.0)) then
-                       app_time(k2,1) = app_time(k1,2) + itrtimestp/2.0d0
+                       app_time(k2,1) = app_time(k1,2) +
+     & itrtimestp/2.0d0
                        event_tag(k1,:) = 1
                        event_tag(:,k2) = 1
                        coalcon_rem(k1) = 1

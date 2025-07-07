@@ -1,4 +1,4 @@
-  export VERSION=200_memLS_changed
+  export VERSION=200_memLS
   export DEVROOT="`pwd`"
   export PARALLEL=intelmpi
   export ARCHOS=x86_64_linux-IB

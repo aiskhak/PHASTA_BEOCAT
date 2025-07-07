@@ -116,7 +116,7 @@ c
         integer buintcfl,coalcon,update_coalcon,coaltimtrak,
      &          coalcon_rem, iBT, iFT, icoalCtrl
      
-        integer, parameter :: coalest = 10000 ! modified, Arsen, this should be defined 
+        integer, parameter :: coalest = 100 ! modified, Arsen, this should be defined 
 
         common /levlset/ epsilon_ls, epsilon_lsd, dtlset, dtlset_cfl,
      &                   redist_toler, redist_toler_curr,

@@ -71,7 +71,8 @@ c
         real*8 xarray(ibksiz), yarray(ibksiz), zarray(ibksiz)
         integer coordtag(ibksiz) !Passed arrays from e3ivar
         real*8 bubradius, bubradius2
-        real*8 avgxcoordf(coalest), avgycoordf(coalest), avgzcoordf(coalest)
+        real*8 avgxcoordf(coalest), avgycoordf(coalest),
+     &avgzcoordf(coalest)
 
 !----------------------------------------------------------------------
         real*8 elemvol_global(nelblk,numel)

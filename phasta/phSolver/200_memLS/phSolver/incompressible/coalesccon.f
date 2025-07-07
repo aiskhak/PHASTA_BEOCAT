@@ -446,7 +446,7 @@ c!....Calculate the maximum angle at the 1st epsilon contour
 
                         do i = 1, npro
                            if ((coalesc_tag(i,iblk).eq.0).and.
-     &                        (totcoordnumbarray(i,iblk).eq.intone)) then
+     &                  (totcoordnumbarray(i,iblk).eq.intone)) then
                               if ((vectdist2(i,iblk).le.
      &                           (2.0d0*bubradius)).and.
      &                           (vectangle(i,iblk).le.phi_max2)) then

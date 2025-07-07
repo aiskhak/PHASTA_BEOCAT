@@ -86,7 +86,7 @@ c
 
         real*8    xmudmi(npro,ngauss),      dwl(npro,nshl),
      &            sclr(npro),               evl(npro,nshl)
-        dimension xKebe(npro,9,nshl,nshl),  rKwall_glob(npro,9,nshl,nshl)
+      dimension xKebe(npro,9,nshl,nshl),  rKwall_glob(npro,9,nshl,nshl)
         integer   intp
 
 

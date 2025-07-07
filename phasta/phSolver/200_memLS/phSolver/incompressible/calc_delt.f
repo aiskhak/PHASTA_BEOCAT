@@ -16,7 +16,7 @@ c
       if(i_res_cf.eq.1)then
        if (iflag_cfl_dt .eq. 1) then
           if (CFLfl_max .le. zero) then
-             write(*,*) "Zero velocity --> zero CFL - cannot modify delt"
+             write(*,*) "Zero velocity -->zero CFL - cannot modify delt"
           else
 c
 c! compute scaling factor - not allowed to vary by more than 25% at a time
@@ -27,7 +27,7 @@ c
                 factor = min(factor_CFLfl,factor_buint)
              else
                 factor = CFL_limit(1) / CFLfl_max
-                write(7916,*) 'Factor and CFL used:', factor, 'CFLfl_max'
+                write(7916,*) 'Factor and CFL used:', factor,'CFLfl_max'
              endif
              if (factor .lt. 0.75) factor = 0.75
              if (factor .gt. 1.25) factor = 1.25
@@ -44,7 +44,7 @@ c
       else !i_res_cf
        if ((iflag_cfl_dt .eq. 1) .and. (istp .gt. 1)) then
           if (CFLfl_max .le. zero) then
-             write(*,*) "Zero velocity --> zero CFL - cannot modify delt"
+             write(*,*) "Zero velocity --> zero CFL -cannot modify delt"
           else
 c
 c compute scaling factor - not allowed to vary by more than 25% at a time
@@ -55,7 +55,7 @@ c
                 factor = min(factor_CFLfl,factor_buint)
              else
                 factor = CFL_limit(1) / CFLfl_max
-                write(7916,*) 'Factor and CFL used:', factor, 'CFLfl_max'
+                write(7916,*) 'Factor and CFL used:', factor,'CFLfl_max'
              endif         
              if (factor .lt. 0.75) factor = 0.75
              if (factor .gt. 1.25) factor = 1.25

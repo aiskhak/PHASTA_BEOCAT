@@ -115,7 +115,8 @@ c
       integer sparseloc 
 
 c!.... Matt Talley's Bubble Coal Control
-      real*8 avgxcoordf(coalest), avgycoordf(coalest), avgzcoordf(coalest)
+      real*8 avgxcoordf(coalest),
+     &avgycoordf(coalest), avgzcoordf(coalest)
 
 c     
 c.... *******************>> Element Data Formation <<******************

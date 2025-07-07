@@ -190,7 +190,7 @@ c         deallocate(nBCt)
 c         deallocate(numBCt)
 c         deallocate(BCt)
       else if (iRBCT.eq.1) then !read multi bct.dat.*1.*2
-          write(*,*) 'read the data of boundary points on each processor'
+         write(*,*) 'read the data of boundary points on each processor'
          call MPI_BARRIER (MPI_COMM_WORLD,ierr)
                    ic=0
                  if( myrank.ge.0 .and. myrank.le.9)then
@@ -209,7 +209,8 @@ c         deallocate(BCt)
                iextsbct=1
             endif
             if(iextsbct.eq.1) then
-            open(1989,file='bct.dat.1.'//trim(filenum1)//'',action='read',status='old')
+            open(1989,file='bct.dat.1.'//trim(filenum1)//'',
+     & action='read',status='old')
             write(*,*) 'bct.dat.1.', myrank, 'is reading'
             read(1989,*) ntv,nptsmax
             allocate (nBCt(numnp))

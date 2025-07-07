@@ -1,1 +1,1 @@
-/homes/aiskhak/PHASTA_beocat_clean_my_version/phasta/phSolver/200_memLS/phSolver/include/STD.h
+../../phasta/phSolver/200_memLS/phSolver/include/STD.h

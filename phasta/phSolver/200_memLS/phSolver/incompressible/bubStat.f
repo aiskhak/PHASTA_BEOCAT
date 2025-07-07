@@ -1003,7 +1003,8 @@ c======================================================================
 !	20: number of elements in the shell outside the bubble
 !	21: number of elements in the shell inside the bubble	
 !-------------------------------------------------------------------------------
-               if (bubboil.eq.1.0.or.bubgrow.eq.1.0.or.CA_flag.eq.1.0d0)then
+               if (bubboil.eq.1.0.or.
+     &bubgrow.eq.1.0.or.CA_flag.eq.1.0d0)then
 
 !                 if(Sclr(i).ge.0.0d0*epsilon_lst_tmp
 !     &           .and.Sclr(i).le.2.0d0*epsilon_lst_tmp)then ! outside
