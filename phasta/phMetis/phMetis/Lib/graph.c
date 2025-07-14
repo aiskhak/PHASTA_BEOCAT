@@ -9,12 +9,11 @@
  * Started 7/25/97
  * George
  *
- * $Id: graph.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: graph.c,v 1.1 1998/11/27 17:59:15 karypis Exp $
  *
  */
 
-#include "metis.h"
-#include "struct.h"
+#include <metis.h>
 
 /*************************************************************************
 * This function sets up the graph from the user input
@@ -22,8 +21,7 @@
 void SetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon,
        idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *adjwgt, int wgtflag)
 {
-  int i, j, k, sum;
-  long long int gsize;
+  int i, j, k, sum, gsize;
   float *nvwgt;
   idxtype tvwgt[MAXNCON];
 
@@ -49,7 +47,7 @@ void SetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon,
 
     gsize += 2*nvtxs;
 
-    graph->gdata = idxmalloc(gsize, "l. 52 SetUpGraph: gdata");
+    graph->gdata = idxmalloc(gsize, "SetUpGraph: gdata");
 
     /* Create the vertex/edge weight vectors if they are not supplied */
     gsize = 0;
@@ -90,7 +88,7 @@ void SetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon,
 
     gsize += 2*nvtxs;
 
-    graph->gdata = idxmalloc(gsize, "l. 93: SetUpGraph: gdata");
+    graph->gdata = idxmalloc(gsize, "SetUpGraph: gdata");
     gsize = 0;
 
     for (i=0; i<ncon; i++) 
@@ -129,7 +127,7 @@ void SetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon,
   }
 
   if (OpType != OP_KMETIS && OpType != OP_KVMETIS) {
-    graph->label = idxmalloc(nvtxs, "l. 132: SetUpGraph: label");
+    graph->label = idxmalloc(nvtxs, "SetUpGraph: label");
 
     for (i=0; i<nvtxs; i++)
       graph->label[i] = i;
@@ -155,7 +153,7 @@ void SetUpGraphKway(GraphType *graph, int nvtxs, idxtype *xadj, idxtype *adjncy)
   graph->adjncy = adjncy;
   graph->adjwgt = NULL;
 
-  graph->gdata = idxmalloc(2*nvtxs, "l. 158: SetUpGraph: gdata");
+  graph->gdata = idxmalloc(2*nvtxs, "SetUpGraph: gdata");
   graph->adjwgtsum = graph->gdata;
   graph->cmap = graph->gdata + nvtxs;
 
@@ -187,7 +185,7 @@ void SetUpGraph2(GraphType *graph, int nvtxs, int ncon, idxtype *xadj,
   graph->nvwgt = fmalloc(nvtxs*ncon, "SetUpGraph2: graph->nvwgt");
   scopy(nvtxs*ncon, nvwgt, graph->nvwgt);
 
-  graph->gdata = idxmalloc(2*nvtxs, "l. 190: SetUpGraph: gdata");
+  graph->gdata = idxmalloc(2*nvtxs, "SetUpGraph: gdata");
 
   /* Compute the initial values of the adjwgtsum */
   graph->adjwgtsum = graph->gdata;
@@ -200,7 +198,7 @@ void SetUpGraph2(GraphType *graph, int nvtxs, int ncon, idxtype *xadj,
 
   graph->cmap = graph->gdata+nvtxs;
 
-  graph->label = idxmalloc(nvtxs, "l. 203: SetUpGraph: label");
+  graph->label = idxmalloc(nvtxs, "SetUpGraph: label");
   for (i=0; i<nvtxs; i++)
     graph->label[i] = i;
 
@@ -235,7 +233,7 @@ void VolSetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon, idxtype *x
 
     gsize += 2*nvtxs;
 
-    graph->gdata = idxmalloc(gsize, "l. 238: SetUpGraph: gdata");
+    graph->gdata = idxmalloc(gsize, "SetUpGraph: gdata");
 
     /* Create the vertex/edge weight vectors if they are not supplied */
     gsize = 0;
@@ -285,7 +283,7 @@ void VolSetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon, idxtype *x
 
     gsize += 2*nvtxs;
 
-    graph->gdata = idxmalloc(gsize, "l. 288: SetUpGraph: gdata");
+    graph->gdata = idxmalloc(gsize, "SetUpGraph: gdata");
     gsize = 0;
 
     /* Create the normalized vertex weights along each constrain */
@@ -339,7 +337,7 @@ void VolSetUpGraph(GraphType *graph, int OpType, int nvtxs, int ncon, idxtype *x
   }
 
   if (OpType != OP_KVMETIS) {
-    graph->label = idxmalloc(nvtxs, "l. 342: SetUpGraph: label");
+    graph->label = idxmalloc(nvtxs, "SetUpGraph: label");
 
     for (i=0; i<nvtxs; i++)
       graph->label[i] = i;

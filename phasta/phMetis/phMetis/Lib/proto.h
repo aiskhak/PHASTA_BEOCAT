@@ -8,7 +8,7 @@
  * Started 10/19/95
  * George
  *
- * $Id: proto.h 141 1999-11-02 08:11:46Z karana $
+ * $Id: proto.h,v 1.1 1998/11/27 17:59:28 karypis Exp $
  *
  */
 
@@ -97,10 +97,6 @@ void METIS_PARTMESHDUAL(int *, int *, idxtype *, int *, int *, int *, int *, idx
 void metis_partmeshdual(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *);
 void metis_partmeshdual_(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *);
 void metis_partmeshdual__(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *);
-void METIS_PARTMESHDUAL_WV(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *,idxtype *);
-void metis_partmeshdual_wv(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *,idxtype *);
-void metis_partmeshdual_wv_(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *,idxtype *);
-void metis_partmeshdual_WV__(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *,idxtype *);
 void METIS_MESHTONODAL(int *, int *, idxtype *, int *, int *, idxtype *, idxtype *);
 void metis_meshtonodal(int *, int *, idxtype *, int *, int *, idxtype *, idxtype *);
 void metis_meshtonodal_(int *, int *, idxtype *, int *, int *, idxtype *, idxtype *);
@@ -236,7 +232,6 @@ void QUADNODALMETIS(int, int, idxtype *, idxtype *, idxtype *adjncy);
 /* meshpart.c */
 void METIS_PartMeshNodal(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *);
 void METIS_PartMeshDual(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *);
-void METIS_PartMeshDual_WV(int *, int *, idxtype *, int *, int *, int *, int *, idxtype *, idxtype *,idxtype *);
 
 /* mfm.c */
 void MocFM_2WayEdgeRefine(CtrlType *, GraphType *, float *, int);
@@ -431,16 +426,17 @@ double seconds(void);
 void errexit(char *,...);
 #ifndef DMALLOC
 int *imalloc(int, char *);
-//idxtype *idxmalloc(int, char *);
+idxtype *idxmalloc(int, char *);
 float *fmalloc(int, char *);
 int *ismalloc(int, int, char *);
-//idxtype *idxsmalloc(int, idxtype, char *);
-//void *GKmalloc(int, char *);
-void *GKmalloc(long long int, char *);
+idxtype *idxsmalloc(int, idxtype, char *);
+void *GKmalloc(int, char *);
 #endif
-/*void GKfree(void **,...); */
+#ifdef WIN32
+void GKfree(void **,...); 
+#endif
 int *iset(int n, int val, int *x);
-idxtype *idxset(long long int n, idxtype val, idxtype *x);
+idxtype *idxset(int n, idxtype val, idxtype *x);
 float *sset(int n, float val, float *x);
 int iamax(int, int *);
 int idxamax(int, idxtype *);
@@ -450,7 +446,6 @@ int samax2(int, float *);
 int idxamin(int, idxtype *);
 int samin(int, float *);
 int idxsum(int, idxtype *);
-long long idxsum_long(int, long long *x);
 int idxsum_strd(int, idxtype *, int);
 void idxadd(int, idxtype *, idxtype *);
 int charsum(int, char *);
@@ -462,11 +457,9 @@ float snorm2(int, float *);
 float sdot(int n, float *, float *);
 void saxpy(int, float, float *, int, float *, int);
 void RandomPermute(int, idxtype *, int);
-double drand48();
-void srand48(long);
 int ispow2(int);
 void InitRandom(int);
-int log2_function(int);
+int ilog2(int);
 
 
 
@@ -489,6 +482,7 @@ void WritePermutation(char *, idxtype *, int);
 int CheckGraph(GraphType *);
 idxtype *ReadMesh(char *, int *, int *, int *);
 void WriteGraph(char *, int, idxtype *, idxtype *);
+void partnmesh(char * meshfile, int nparts, int verbose);
 
 /* smbfactor.c */
 void ComputeFillIn(GraphType *, idxtype *);

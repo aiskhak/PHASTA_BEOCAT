@@ -8,11 +8,11 @@
  * Started 8/1/97
  * George
  *
- * $Id: sfm.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: sfm.c,v 1.1 1998/11/27 17:59:30 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************

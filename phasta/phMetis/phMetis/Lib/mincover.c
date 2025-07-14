@@ -8,10 +8,10 @@
  * Started 8/1/97
  * George
  *
- * $Id: mincover.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mincover.c,v 1.1 1998/11/27 17:59:22 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
 
 /*************************************************************************
 * Constants used by mincover algorithm

@@ -108,11 +108,17 @@ int input_fform(char inpfname[])
        ycfcoeffvec = inp.GetValue("Y Control Force Coefficients");
        zcfcoeffvec = inp.GetValue("Z Control Force Coefficients");
        for(i=0; i<10; i++){
-          bubstudy.xcfcoeff[i]=xcfcoeffvec[i];
+          bubstudy.xcfcoeff[i]=
+          //xcfcoeffvec[i];
+          (i < (int)xcfcoeffvec.size() ? xcfcoeffvec[i] : 0.0);
        }
        for(i=0; i<9; i++){
-          bubstudy.ycfcoeff[i]=ycfcoeffvec[i];
-          bubstudy.zcfcoeff[i]=zcfcoeffvec[i];
+          bubstudy.ycfcoeff[i]=
+          //ycfcoeffvec[i];
+          (i < (int)ycfcoeffvec.size() ? ycfcoeffvec[i] : 0.0);
+          bubstudy.zcfcoeff[i]=
+          //zcfcoeffvec[i];
+          (i < (int)zcfcoeffvec.size() ? zcfcoeffvec[i] : 0.0);
        }
        xcfcoeffvec.erase(xcfcoeffvec.begin(),xcfcoeffvec.end());
        ycfcoeffvec.erase(ycfcoeffvec.begin(),ycfcoeffvec.end());
@@ -142,7 +148,9 @@ int input_fform(char inpfname[])
       inpdat.iflag_cfl_dt = 1;
       vec = inp.GetValue("Maximum CFL Number Allowed");
       for(i=0; i<2 ; i++){
-      inpdat.CFL_limit[i] = vec[i];
+      inpdat.CFL_limit[i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
       }
       vec.erase(vec.begin(),vec.end());
 
@@ -339,31 +347,41 @@ int input_fform(char inpfname[])
     //Limiting
     vec = inp.GetValue("Limit u1");
     for(i=0; i<3 ; i++){
-      turbvar.ylimit[0][i] = vec[i];
+      turbvar.ylimit[0][i] = 
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
     vec = inp.GetValue("Limit u2");
     for(i=0; i<3 ; i++){
-      turbvar.ylimit[1][i] = vec[i];
+      turbvar.ylimit[1][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
     vec = inp.GetValue("Limit u3");
     for(i=0; i<3 ; i++){
-      turbvar.ylimit[2][i] = vec[i];
+      turbvar.ylimit[2][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
     vec = inp.GetValue("Limit Pressure");
     for(i=0; i<3 ; i++){
-      turbvar.ylimit[3][i] = vec[i];
+      turbvar.ylimit[3][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
     vec = inp.GetValue("Limit Temperature");
     for(i=0; i<3 ; i++){
-      turbvar.ylimit[4][i] = vec[i];
+      turbvar.ylimit[4][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
@@ -382,13 +400,17 @@ int input_fform(char inpfname[])
 
     vec = inp.GetValue("Density");
     for(i=0; i< levlset.iLSet +1 ; i++){
-      matdat.datmat[i][0][0] = vec[i];
+      matdat.datmat[i][0][0] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
     vec = inp.GetValue("Viscosity");
     for(i=0; i< levlset.iLSet +1 ; i++){
-      matdat.datmat[i][1][0] = vec[i];
+      matdat.datmat[i][1][0] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
@@ -434,18 +456,24 @@ int input_fform(char inpfname[])
     vec = inp.GetValue("Specific Heat");
         
     for(i=0; i< levlset.iLSet +1 ; i++){
-      matdat.datmat[i][2][0] = vec[i];
+      matdat.datmat[i][2][0] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
       vec.erase(vec.begin(),vec.end());
     vec = inp.GetValue("Thermal Conductivity");
     for(i=0; i< levlset.iLSet +1 ; i++){
-      matdat.datmat[i][3][0] = vec[i];
+      matdat.datmat[i][3][0] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
   }
     vec = inp.GetValue("Scalar Diffusivity");
     for(i=0; i< solscalr ; i++){
-      sclrs.scdiff[i] = vec[i];
+      sclrs.scdiff[i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
@@ -505,18 +533,32 @@ int input_fform(char inpfname[])
     }
 
     vec = inp.GetValue("Body Force");
-    for(i=0; i< levlset.iLSet +1 ; i++){
-      matdat.datmat[i][4][0] = vec[0+i*3];
-      matdat.datmat[i][4][1] = vec[1+i*3];
-      matdat.datmat[i][4][2] = vec[2+i*3];
+    //for(i=0; i< levlset.iLSet +1 ; i++){
+    //  matdat.datmat[i][4][0] = vec[0+i*3];
+    //  matdat.datmat[i][4][1] = vec[1+i*3];
+    //  matdat.datmat[i][4][2] = vec[2+i*3];
+    //}
+    size_t n = vec.size();
+    for (i = 0; i < levlset.iLSet+1; ++i) {
+      size_t base = 3*i;
+      matdat.datmat[i][4][0] = (base+0 < n ? vec[base+0] : 0.0);
+      matdat.datmat[i][4][1] = (base+1 < n ? vec[base+1] : 0.0);
+      matdat.datmat[i][4][2] = (base+2 < n ? vec[base+2] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
     vec = inp.GetValue("Body Force Pressure Gradient");
-    for(i=0; i< levlset.iLSet +1 ; i++){
-      matdat.datmat[i][6][0] = vec[0+i*3];
-      matdat.datmat[i][6][1] = vec[1+i*3];
-      matdat.datmat[i][6][2] = vec[2+i*3];
+    //for(i=0; i< levlset.iLSet +1 ; i++){
+    //  matdat.datmat[i][6][0] = vec[0+i*3];
+    //  matdat.datmat[i][6][1] = vec[1+i*3];
+    //  matdat.datmat[i][6][2] = vec[2+i*3];
+    //}
+    n = vec.size();
+    for (i = 0; i < levlset.iLSet + 1; ++i) {
+        size_t base = 3 * i;
+        matdat.datmat[i][6][0] = (base + 0 < n ? vec[base + 0] : 0.0);
+        matdat.datmat[i][6][1] = (base + 1 < n ? vec[base + 1] : 0.0);
+        matdat.datmat[i][6][2] = (base + 2 < n ? vec[base + 2] : 0.0);
     }
     vec.erase(vec.begin(),vec.end());
 
@@ -566,7 +608,7 @@ int input_fform(char inpfname[])
 
 
     //Linear Solver parameters
-    inpdat.memLSFlag=0;    // memLS
+    inpdat.svLSFlag=0;    // memLS
     if( (string)inp.GetValue("Solver Type") =="ACUSIM with P Projection" ){
       incomp.iprjFlag = 0; incomp.ipresPrjFlag=1;}
     else if ( (string)inp.GetValue("Solver Type") =="ACUSIM" ){
@@ -579,8 +621,8 @@ int input_fform(char inpfname[])
       inpdat.impl[0] += 10*solflow;}
     else if( (string)inp.GetValue("Solver Type") =="GMRES EBE"){ 
       inpdat.impl[0] += 20*solflow;}
-    else if( (string)inp.GetValue("Solver Type") =="memLS"){    // memLS
-      inpdat.memLSFlag=1;}
+    else if( (string)inp.GetValue("Solver Type") =="svLS"){    // svLS ! Arsen
+      inpdat.svLSFlag=1;}
     //GMRES sparse is assumed default and has the value of 10, MFG 20,
     // EBE 30
 
@@ -591,7 +633,8 @@ int input_fform(char inpfname[])
     inpdat.LHSupd[0] = inp.GetValue("Number of Solves per Left-hand-side Formation");
     inpdat.epstol[0] = inp.GetValue("Tolerance on Momentum Equations");
     inpdat.epstol[6] = inp.GetValue("Tolerance on Continuity Equations");
-    inpdat.epstol[7] = inp.GetValue("Tolerance on memLS NS Solver");
+    //inpdat.epstol[7] = inp.GetValue("Tolerance on memLS NS Solver");
+    inpdat.epstol[7] = inp.GetValue("Tolerance on svLS NS Solver"); // Arsen
     incomp.prestol = inp.GetValue("Tolerance on ACUSIM Pressure Projection"); 
     incomp.minIters = inp.GetValue("Minimum Number of Iterations per Nonlinear Iteration");
     incomp.maxIters = inp.GetValue("Maximum Number of Iterations per Nonlinear Iteration");
@@ -618,7 +661,9 @@ int input_fform(char inpfname[])
 
       vec = inp.GetValue("Limit Scalar 1");
       for(i=0; i<3 ; i++){
-        turbvar.ylimit[5][i] = vec[i];
+        turbvar.ylimit[5][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
       }
       vec.erase(vec.begin(),vec.end());
     } 
@@ -629,7 +674,9 @@ int input_fform(char inpfname[])
 
       vec = inp.GetValue("Limit Scalar 2");
       for(i=0; i<3 ; i++){
-        turbvar.ylimit[6][i] = vec[i];
+        turbvar.ylimit[6][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
       }
       vec.erase(vec.begin(),vec.end());
     } 
@@ -640,7 +687,9 @@ int input_fform(char inpfname[])
 
       vec = inp.GetValue("Limit Scalar 3");
       for(i=0; i<3 ; i++){
-        turbvar.ylimit[7][i] = vec[i];
+        turbvar.ylimit[7][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
       }
       vec.erase(vec.begin(),vec.end());
     } 
@@ -651,7 +700,9 @@ int input_fform(char inpfname[])
 
       vec = inp.GetValue("Limit Scalar 4");
       for(i=0; i<3 ; i++){
-        turbvar.ylimit[8][i] = vec[i];
+        turbvar.ylimit[8][i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
       }
       vec.erase(vec.begin(),vec.end());
     }
@@ -720,7 +771,9 @@ int input_fform(char inpfname[])
     // SCALAR DISCONTINUITY CAPTURING
 
       vector<int> ivec = inp.GetValue("Scalar Discontinuity Capturing");
-      for(i=0; i< 2; i++)  solpar.idcsclr[i] = ivec[i];
+      for(i=0; i< 2; i++)  solpar.idcsclr[i] =
+      //ivec[i];
+      (i < (int)ivec.size() ? ivec[i] : 0.0);
       ivec.erase(ivec.begin(),ivec.end());
  
 
@@ -863,7 +916,9 @@ int input_fform(char inpfname[])
    
        vec = inp.GetValue("The superheated rate");
        for(i=0; i<2 ; i++){
-       pcboiling.delt_T[i] = vec[i];
+       pcboiling.delt_T[i] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
         }
        vec.erase(vec.begin(),vec.end());
 //     Mengnan
@@ -918,22 +973,41 @@ int input_fform(char inpfname[])
           ivec = inp.GetValue("List of Resistance Surfaces");          
           for(i=0;i<MAXSURF+1; i++) nomodule.nsrflistResist[i] = 0;
           for(i=0; i< nomodule.numResistSrfs; i++){
-              nomodule.nsrflistResist[i+1] = ivec[i];
+              nomodule.nsrflistResist[i+1] =
+      //ivec[i];
+      (i < (int)ivec.size() ? ivec[i] : 0.0);
           }
           vec = inp.GetValue("Resistance Values");
           for(i =0; i< MAXSURF+1 ; i++) nomodule.ValueListResist[i] = 0;
-          for(i =0; i< nomodule.numResistSrfs ; i++) nomodule.ValueListResist[i+1] = vec[i];
+          for(i =0; i< nomodule.numResistSrfs ; i++) nomodule.ValueListResist[i+1] =
+      //vec[i];
+      (i < (int)vec.size() ? vec[i] : 0.0);
           vec.erase(vec.begin(),vec.end());
       }
+	  /*
       if(nomodule.numImpSrfs=inp.GetValue("Number of Impedance Surfaces")){
           ivec = inp.GetValue("List of Impedance Surfaces");
           for(i=0;i<MAXSURF+1; i++) nomodule.nsrflistImp[i] = 0;
           for(i=0; i< nomodule.numImpSrfs; i++){
-              nomodule.nsrflistImp[i+1] = ivec[i];
+              nomodule.nsrflistImp[i+1] =
+      //ivec[i];
+      (i < (int)ivec.size() ? ivec[i] : 0.0);
           }
           if ( (string)inp.GetValue("Impedance From File") == "True")
               nomodule.impfile = 1; else nomodule.impfile = 0;
       }
+	  */
+	  nomodule.numImpSrfs = inp.GetValue("Number of Impedance Surfaces");
+	  nomodule.impfile    = 0;                // default
+	  if (nomodule.numImpSrfs > 0) {
+		ivec = inp.GetValue("List of Impedance Surfaces");
+		for (i = 0; i < MAXSURF+1; ++i)
+		  nomodule.nsrflistImp[i] = 0;
+		for (i = 0; i < nomodule.numImpSrfs; ++i)
+		  nomodule.nsrflistImp[ivec[i]] = 1;
+		if ((string)inp.GetValue("Impedance From File") == "True")
+		  nomodule.impfile = 1;
+	  }
 
     }
     if ( (string)inp.GetValue("Time Varying Boundary Conditions From File") == "True") 
@@ -958,8 +1032,7 @@ int input_fform(char inpfname[])
         else nomodule.iwallmassfactor = 0;
         if((string)inp.GetValue("Wall Stiffness Matrix for LHS") == "True") nomodule.iwallstiffactor = 1;
         else nomodule.iwallstiffactor = 0; 
-    } 
-
+    }
    
     // Scaling Parameters Keywords
 
@@ -978,7 +1051,9 @@ int input_fform(char inpfname[])
      cerr<<"Sequence size must be between 2 and 200 "<<endl;
    
     for(i=0; i< sequence.seqsize; i++)
-      sequence.stepseq[i] = ivec[i];
+      sequence.stepseq[i] =
+      //ivec[i];
+      (i < (int)ivec.size() ? ivec[i] : 0.0);
 
   }
   catch ( exception &e ) {

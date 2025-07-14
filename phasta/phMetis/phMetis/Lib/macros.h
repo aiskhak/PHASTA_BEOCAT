@@ -8,7 +8,7 @@
  * Started 9/25/94
  * George
  *
- * $Id: macros.h 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: macros.h,v 1.1 1998/11/27 17:59:18 karypis Exp $
  *
  */
 
@@ -16,7 +16,8 @@
 /*************************************************************************
 * The following macro returns a random number in the specified range
 **************************************************************************/
-#ifdef __VC__
+#ifdef WIN32
+#include <stdlib.h>
 #define RandomInRange(u) ((rand()>>3)%(u))
 #define RandomInRangeFast(u) ((rand()>>3)%(u))
 #else
@@ -25,8 +26,8 @@
 #endif
 
 
-// EVIL macros. Why are these needed? --BFD 4/20/2006
-#define amax(a, b) ((a) >= (b) ? (a) : (b)) 
+
+#define amax(a, b) ((a) >= (b) ? (a) : (b))
 #define amin(a, b) ((a) >= (b) ? (b) : (a))
 
 #define AND(a, b) ((a) < 0 ? ((-(a))&(b)) : ((a)&(b)))

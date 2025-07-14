@@ -4,6 +4,7 @@
 //
 // Input variables that have been previously declared in common.h have to be
 // re-declared here, in a consistant structure.   
+/* Arsen
 #ifdef intel
 
 #define workfc WORKFC 
@@ -56,7 +57,7 @@
 #define contactangle CONTACTANGLE
 
 #elif ( !defined ibm)
-
+*/
 #define workfc workfc_ 
 #define fronts fronts_ 
 #define newdim newdim_ 
@@ -106,7 +107,7 @@
 #define pcboiling pcboiling_
 #define contactangle contactangle_
 
-#endif
+//#endif
 
 #define MAXBLK   5000
 #define MAXSURF  20  
@@ -266,6 +267,8 @@ extern "C" {
     int nflow;
     int nnz_tot;
     int idtn;
+    int ncorpsize;    // Arsen
+    int iownnodes;    // Arsen
   } conpar ;
   
   extern struct { 
@@ -509,6 +512,7 @@ extern "C" {
     double CFLbuint_max;
     double factor_buint;
     double factor_CFLfl;
+    int svLSFlag; //Arsen, added the svLSFlag
   } inpdat ;
 
   extern struct { 

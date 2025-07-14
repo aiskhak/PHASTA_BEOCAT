@@ -7,11 +7,11 @@
  * Started 2/15/98
  * George
  *
- * $Id: mutil.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mutil.c,v 1.1 1998/11/27 17:59:27 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************

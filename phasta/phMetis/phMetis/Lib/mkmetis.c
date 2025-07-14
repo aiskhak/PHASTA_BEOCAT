@@ -9,11 +9,11 @@
  * Started 7/28/97
  * George
  *
- * $Id: mkmetis.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mkmetis.c,v 1.2 1998/11/27 18:25:09 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 
@@ -47,7 +47,7 @@ void METIS_mCPartGraphKway(int *nvtxs, int *ncon, idxtype *xadj, idxtype *adjncy
     ctrl.dbglvl = options[OPTION_DBGLVL];
   }
   ctrl.optype = OP_KMETIS;
-  ctrl.CoarsenTo = amax((*nvtxs)/(20*log2_function(*nparts)), 30*(*nparts));
+  ctrl.CoarsenTo = amax((*nvtxs)/(20*ilog2(*nparts)), 30*(*nparts));
 
   ctrl.nmaxvwgt = 1.5/(1.0*ctrl.CoarsenTo);
 
@@ -115,7 +115,7 @@ int MCMlevelKWayPartitioning(CtrlType *ctrl, GraphType *graph, int nparts, idxty
 
   idxcopy(graph->nvtxs, graph->where, part);
 
-  GKfree(&graph->nvwgt, &graph->gdata, &graph->rdata, LTERM);
+  GKfree(&graph->nvwgt, &graph->npwgts, &graph->gdata, &graph->rdata, LTERM);
 
   return graph->mincut;
 

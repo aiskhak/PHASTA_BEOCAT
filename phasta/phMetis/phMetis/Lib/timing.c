@@ -8,11 +8,11 @@
  * Started 7/24/97
  * George
  *
- * $Id: timing.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: timing.c,v 1.1 1998/11/27 17:59:32 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************

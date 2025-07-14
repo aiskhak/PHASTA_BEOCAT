@@ -8,12 +8,11 @@
  * Started 9/15/97
  * George
  *
- * $Id: frename.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: frename.c,v 1.1 1998/11/27 17:59:14 karypis Exp $
  *
  */
 
-#include "metis.h"
-#include "struct.h"
+#include <metis.h>
 
 
 void METIS_PARTGRAPHRECURSIVE(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *adjwgt, int *wgtflag, int *numflag, int *nparts, int *options, int *edgecut, idxtype *part)
@@ -184,24 +183,6 @@ void metis_partmeshdual__(int *ne, int *nn, idxtype *elmnts, int *etype, int *nu
 }
 
 
-void METIS_PARTMESHDUAL_WV(int *ne, int *nn, idxtype *elmnts, int *etype, int *numflag, int *nparts, int *edgecut, idxtype *epart, idxtype *npart,idxtype *vwgts)
-{
-  METIS_PartMeshDual_WV(ne, nn, elmnts, etype, numflag, nparts, edgecut, epart, npart, vwgts);
-}
-void metis_partmeshdual_wv(int *ne, int *nn, idxtype *elmnts, int *etype, int *numflag, int *nparts, int *edgecut, idxtype *epart, idxtype *npart, idxtype *vwgts)
-{
-  METIS_PartMeshDual_WV(ne, nn, elmnts, etype, numflag, nparts, edgecut, epart, npart, vwgts);
-}
-void metis_partmeshdual_wv_(int *ne, int *nn, idxtype *elmnts, int *etype, int *numflag, int *nparts, int *edgecut, idxtype *epart, idxtype *npart, idxtype *vwgts)
-{
-  METIS_PartMeshDual_WV(ne, nn, elmnts, etype, numflag, nparts, edgecut, epart, npart, vwgts);
-}
-void metis_partmeshdual_WV__(int *ne, int *nn, idxtype *elmnts, int *etype, int *numflag, int *nparts, int *edgecut, idxtype *epart, idxtype *npart, idxtype *vwgts)
-{
-  METIS_PartMeshDual_WV(ne, nn, elmnts, etype, numflag, nparts, edgecut, epart, npart, vwgts);
-}
-
-
 void METIS_MESHTONODAL(int *ne, int *nn, idxtype *elmnts, int *etype, int *numflag, idxtype *dxadj, idxtype *dadjncy)
 {
   METIS_MeshToNodal(ne, nn, elmnts, etype, numflag, dxadj, dadjncy);
@@ -297,15 +278,15 @@ void METIS_PARTGRAPHVKWAY(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *v
 {
   METIS_PartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, options, volume, part);
 }
-void metis_partgraphvkaway(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, int *options, int *volume, idxtype *part)
+void metis_partgraphvkway(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, int *options, int *volume, idxtype *part)
 {
   METIS_PartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, options, volume, part);
 }
-void metis_partgraphvkaway_(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, int *options, int *volume, idxtype *part)
+void metis_partgraphvkway_(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, int *options, int *volume, idxtype *part)
 {
   METIS_PartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, options, volume, part);
 }
-void metis_partgraphvkaway__(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, int *options, int *volume, idxtype *part)
+void metis_partgraphvkway__(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, int *options, int *volume, idxtype *part)
 {
   METIS_PartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, options, volume, part);
 }
@@ -314,15 +295,15 @@ void METIS_WPARTGRAPHVKWAY(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *
 {
   METIS_WPartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, tpwgts, options, volume, part);
 }
-void metis_wpartgraphvkaway(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, float *tpwgts, int *options, int *volume, idxtype *part)
+void metis_wpartgraphvkway(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, float *tpwgts, int *options, int *volume, idxtype *part)
 {
   METIS_WPartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, tpwgts, options, volume, part);
 }
-void metis_wpartgraphvkaway_(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, float *tpwgts, int *options, int *volume, idxtype *part)
+void metis_wpartgraphvkway_(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, float *tpwgts, int *options, int *volume, idxtype *part)
 {
   METIS_WPartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, tpwgts, options, volume, part);
 }
-void metis_wpartgraphvkaway__(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, float *tpwgts, int *options, int *volume, idxtype *part)
+void metis_wpartgraphvkway__(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *vwgt, idxtype *vsize, int *wgtflag, int *numflag, int *nparts, float *tpwgts, int *options, int *volume, idxtype *part)
 {
   METIS_WPartGraphVKway(nvtxs, xadj, adjncy, vwgt, vsize, wgtflag, numflag, nparts, tpwgts, options, volume, part);
 }

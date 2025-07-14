@@ -1,0 +1,3 @@
+gmake VERS=opt clean
+gmake VERS=opt setup
+gmake VERS=opt 

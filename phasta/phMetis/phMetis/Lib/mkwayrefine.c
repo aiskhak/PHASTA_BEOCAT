@@ -8,10 +8,10 @@
  * Started 7/28/97
  * George
  *
- * $Id: mkwayrefine.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mkwayrefine.c,v 1.2 1998/11/27 18:16:19 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -71,14 +71,15 @@ void MocAllocateKWayPartitionMemory(CtrlType *ctrl, GraphType *graph, int nparts
   nvtxs = graph->nvtxs;
   ncon = graph->ncon;
 
-  pad64 = (3*nvtxs+nparts)%2;
+  pad64 = (3*nvtxs)%2;
 
-  graph->rdata = idxmalloc(3*nvtxs+ncon*nparts+(sizeof(RInfoType)/sizeof(idxtype))*nvtxs+pad64, "AllocateKWayPartitionMemory: rdata");
-  graph->npwgts         = (float *)graph->rdata;
-  graph->where          = graph->rdata + ncon*nparts;
-  graph->bndptr         = graph->rdata + nvtxs + ncon*nparts;
-  graph->bndind         = graph->rdata + 2*nvtxs + ncon*nparts;
-  graph->rinfo          = (RInfoType *)(graph->rdata + 3*nvtxs+ncon*nparts + pad64);
+  graph->rdata = idxmalloc(3*nvtxs+(sizeof(RInfoType)/sizeof(idxtype))*nvtxs+pad64, "AllocateKWayPartitionMemory: rdata");
+  graph->where          = graph->rdata;
+  graph->bndptr         = graph->rdata + nvtxs;
+  graph->bndind         = graph->rdata + 2*nvtxs;
+  graph->rinfo          = (RInfoType *)(graph->rdata + 3*nvtxs + pad64);
+
+  graph->npwgts         = fmalloc(ncon*nparts, "MocAllocateKWayPartitionMemory: npwgts");
 }
 
 

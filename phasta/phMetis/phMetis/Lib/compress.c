@@ -9,11 +9,10 @@
  * Started 9/17/97
  * George
  *
- * $Id: compress.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: compress.c,v 1.1 1998/11/27 17:59:12 karypis Exp $
  */
 
-#include "metis.h"
-#include "struct.h"
+#include <metis.h>
 
 /*************************************************************************
 * This function compresses a graph by merging identical vertices

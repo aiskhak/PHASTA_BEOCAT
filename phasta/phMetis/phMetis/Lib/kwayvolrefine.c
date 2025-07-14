@@ -8,10 +8,10 @@
  * Started 7/28/97
  * George
  *
- * $Id: kwayvolrefine.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: kwayvolrefine.c,v 1.2 1998/11/30 16:13:57 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -26,14 +26,12 @@ void RefineVolKWay(CtrlType *ctrl, GraphType *orggraph, GraphType *graph, int np
   IFSET(ctrl->dbglvl, DBG_TIME, starttimer(ctrl->UncoarsenTmr));
 
   /* Take care any non-contiguity */
-  IFSET(ctrl->dbglvl, DBG_TIME, starttimer(ctrl->AuxTmr1));
   if (ctrl->RType == RTYPE_KWAYRANDOM_MCONN) {
     ComputeVolKWayPartitionParams(ctrl, graph, nparts);
     EliminateVolComponents(ctrl, graph, nparts, tpwgts, 1.25);
     EliminateVolSubDomainEdges(ctrl, graph, nparts, tpwgts);
     EliminateVolComponents(ctrl, graph, nparts, tpwgts, 1.25);
   }
-  IFSET(ctrl->dbglvl, DBG_TIME, stoptimer(ctrl->AuxTmr1));
 
 
   /* Determine how many levels are there */
@@ -62,10 +60,10 @@ void RefineVolKWay(CtrlType *ctrl, GraphType *orggraph, GraphType *graph, int np
 
     switch (ctrl->RType) {
       case RTYPE_KWAYRANDOM:
-        Random_KWayVolRefine(ctrl, graph, nparts, tpwgts, ubfactor, 10, 1); 
+        Random_KWayVolRefine(ctrl, graph, nparts, tpwgts, ubfactor, 10, 0); 
         break;
       case RTYPE_KWAYRANDOM_MCONN:
-        Random_KWayVolRefineMConn(ctrl, graph, nparts, tpwgts, ubfactor, 10, 1); 
+        Random_KWayVolRefineMConn(ctrl, graph, nparts, tpwgts, ubfactor, 10, 0); 
         break;
     }
     IFSET(ctrl->dbglvl, DBG_TIME, stoptimer(ctrl->RefTmr));
@@ -145,7 +143,6 @@ void ComputeVolKWayPartitionParams(CtrlType *ctrl, GraphType *graph, int nparts)
   pwgts = idxset(nparts, 0, graph->pwgts);
   rinfo = graph->vrinfo;
 
-starttimer(ctrl->AuxTmr1);
 
   /*------------------------------------------------------------
   / Compute now the id/ed degrees
@@ -199,7 +196,6 @@ starttimer(ctrl->AuxTmr1);
   }
   graph->mincut = mincut/2;
 
-stoptimer(ctrl->AuxTmr1);
 
   ComputeKWayVolGains(ctrl, graph, nparts);
 
@@ -228,8 +224,6 @@ void ComputeKWayVolGains(CtrlType *ctrl, GraphType *graph, int nparts)
   bndptr = idxset(nvtxs, -1, graph->bndptr);
   rinfo = graph->vrinfo;
 
-starttimer(ctrl->AuxTmr2);
-
   ophtable = idxset(nparts, -1, idxwspacemalloc(ctrl, nparts));
 
   /*------------------------------------------------------------
@@ -238,7 +232,7 @@ starttimer(ctrl->AuxTmr2);
   graph->minvol = graph->nbnd = 0;
   for (i=0; i<nvtxs; i++) {
     myrinfo = rinfo+i;
-    myrinfo->gv = -MAXIDX;
+    myrinfo->gv = -(MAXIDX);
 
     if (myrinfo->ndegrees > 0) {
       me = where[i];
@@ -301,8 +295,6 @@ starttimer(ctrl->AuxTmr2);
     if (myrinfo->gv >= 0 || myrinfo->ed-myrinfo->id >= 0)
       BNDInsert(graph->nbnd, bndind, bndptr, i);
   }
-
-stoptimer(ctrl->AuxTmr2);
 
   idxwspacefree(ctrl, nparts);
 

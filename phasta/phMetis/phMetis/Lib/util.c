@@ -8,10 +8,15 @@
  * Started 9/28/95
  * George
  *
- * $Id: util.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: util.c,v 1.1 1998/11/27 17:59:32 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
+
+#ifdef WIN32
+#include <stdlib.h>
+#define srand48 srand
+#endif
 
 
 /*************************************************************************
@@ -20,16 +25,16 @@
 void errexit(char *f_str,...)
 {
   va_list argp;
-  char out1[256], out2[256];
+
+  fprintf(stderr, "[METIS Fatal Error] ");
 
   va_start(argp, f_str);
-  vsprintf(out1, f_str, argp);
+  vfprintf(stderr, f_str, argp);
   va_end(argp);
 
-  sprintf(out2, "Error! %s", out1);
-
-  fprintf(stdout, out2);
-  fflush(stdout);
+  if (strlen(f_str) == 0 || f_str[strlen(f_str)-1] != '\n')
+    fprintf(stderr,"\n");
+  fflush(stderr);
 
   abort();
 }
@@ -52,15 +57,12 @@ int *imalloc(int n, char *msg)
 /*************************************************************************
 * The following function allocates an array of integers
 **************************************************************************/
-idxtype *idxmalloc(long int n, char *msg)
+idxtype *idxmalloc(int n, char *msg)
 {
   if (n == 0)
     return NULL;
 
-  long long int nsize = sizeof(idxtype);
-  long long int nalloc = nsize*n;
-
-  return (idxtype *)GKmalloc(nalloc, msg);
+  return (idxtype *)GKmalloc(sizeof(idxtype)*n, msg);
 }
 
 
@@ -92,7 +94,7 @@ int *ismalloc(int n, int ival, char *msg)
 /*************************************************************************
 * The follwoing function allocates an array of integers
 **************************************************************************/
-idxtype *idxsmalloc(long long int n, idxtype ival, char *msg)
+idxtype *idxsmalloc(int n, idxtype ival, char *msg)
 {
   if (n == 0)
     return NULL;
@@ -104,7 +106,7 @@ idxtype *idxsmalloc(long long int n, idxtype ival, char *msg)
 /*************************************************************************
 * This function is my wrapper around malloc
 **************************************************************************/
-void *GKmalloc(long long int nbytes, char *msg)
+void *GKmalloc(int nbytes, char *msg)
 {
   void *ptr;
 
@@ -161,9 +163,9 @@ int *iset(int n, int val, int *x)
 /*************************************************************************
 * These functions set the values of a vector
 **************************************************************************/
-idxtype *idxset(long long int n, idxtype val, idxtype *x)
+idxtype *idxset(int n, idxtype val, idxtype *x)
 {
-  long long int i;
+  int i;
 
   for (i=0; i<n; i++)
     x[i] = val;
@@ -305,8 +307,7 @@ int samin(int n, float *x)
 **************************************************************************/
 int idxsum(int n, idxtype *x)
 {
-  long long int i;
-  idxtype sum = 0;
+  int i, sum = 0;
 
   for (i=0; i<n; i++)
     sum += x[i];
@@ -314,19 +315,6 @@ int idxsum(int n, idxtype *x)
   return sum;
 }
 
-/*************************************************************************
- * * This function sums the entries in an array  LONG _ Igor 08_2012
- * **************************************************************************/
-long long int idxsum_long(int n, long long int *x)
-{
-  long long int i;
-  long long sum = 0;
-
-  for (i=0; i<n; i++)
-    sum += x[i];
-
-  return sum;
-}
 
 /*************************************************************************
 * This function sums the entries in an array
@@ -526,7 +514,7 @@ void InitRandom(int seed)
 /*************************************************************************
 * This function returns the log2(x)
 **************************************************************************/
-int log2_function(int a)
+int ilog2(int a)
 {
   int i;
 

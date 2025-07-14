@@ -8,7 +8,7 @@
  * Started 10/2/97
  * George
  *
- * $Id: rename.h 141 1999-11-02 08:11:46Z karana $
+ * $Id: rename.h,v 1.1 1998/11/27 17:59:29 karypis Exp $
  *
  */
 
@@ -410,7 +410,7 @@
 #define RandomPermute			__RandomPermute
 #define ispow2				__ispow2
 #define InitRandom			__InitRandom
-#define log2_function			__log2_function
+#define ilog2				__ilog2
 
 
 

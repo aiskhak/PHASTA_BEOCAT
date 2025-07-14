@@ -9,11 +9,11 @@
  * Started 7/24/97
  * George
  *
- * $Id: mpmetis.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mpmetis.c,v 1.4 1998/11/30 14:50:44 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 
@@ -245,7 +245,7 @@ int MCMlevelRecursiveBisection(CtrlType *ctrl, GraphType *graph, int nparts, idx
 
   nvtxs = graph->nvtxs;
   if (nvtxs == 0) {
-    printf("\t***Cannot bisect a graph with 0 vertices!\n\t***You are trying to partition a graph into too many parts!\n");
+    printf("\t***Cannot bisect a graph with 0 vertices!\n\t***You are trying to partition a graph into too many parts! MCM\n");
     return 0;
   }
 
@@ -265,7 +265,7 @@ int MCMlevelRecursiveBisection(CtrlType *ctrl, GraphType *graph, int nparts, idx
     SplitGraphPart(ctrl, graph, &lgraph, &rgraph);
 
   /* Free the memory of the top level graph */
-  GKfree(&graph->gdata, &graph->nvwgt, &graph->rdata, &graph->label, LTERM);
+  GKfree(&graph->gdata, &graph->nvwgt, &graph->rdata, &graph->npwgts, &graph->label, LTERM);
 
 
   /* Do the recursive call */
@@ -300,7 +300,7 @@ int MCHMlevelRecursiveBisection(CtrlType *ctrl, GraphType *graph, int nparts, id
   nvtxs = graph->nvtxs;
   ncon = graph->ncon;
   if (nvtxs == 0) {
-    printf("\t***Cannot bisect a graph with 0 vertices!\n\t***You are trying to partition a graph into too many parts!\n");
+    printf("\t***Cannot bisect a graph with 0 vertices!\n\t***You are trying to partition a graph into too many parts! MCHM\n");
     return 0;
   }
 
@@ -338,7 +338,7 @@ int MCHMlevelRecursiveBisection(CtrlType *ctrl, GraphType *graph, int nparts, id
   }
 
   /* Free the memory of the top level graph */
-  GKfree(&graph->gdata, &graph->nvwgt, &graph->rdata, &graph->label, LTERM);
+  GKfree(&graph->gdata, &graph->nvwgt, &graph->rdata, &graph->npwgts, &graph->label, LTERM);
 
 
   /* Do the recursive call */

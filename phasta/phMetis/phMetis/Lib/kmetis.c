@@ -9,11 +9,11 @@
  * Started 7/28/97
  * George
  *
- * $Id: kmetis.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: kmetis.c,v 1.1 1998/11/27 17:59:15 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -66,7 +66,7 @@ void METIS_WPartGraphKway(int *nvtxs, idxtype *xadj, idxtype *adjncy, idxtype *v
     ctrl.dbglvl = options[OPTION_DBGLVL];
   }
   ctrl.optype = OP_KMETIS;
-  ctrl.CoarsenTo = amax((*nvtxs)/(40*log2_function(*nparts)), 20*(*nparts));
+  ctrl.CoarsenTo = amax((*nvtxs)/(40*ilog2(*nparts)), 20*(*nparts));
   ctrl.maxvwgt = 1.5*((graph.vwgt ? idxsum(*nvtxs, graph.vwgt) : (*nvtxs))/ctrl.CoarsenTo);
 
   InitRandom(-1);

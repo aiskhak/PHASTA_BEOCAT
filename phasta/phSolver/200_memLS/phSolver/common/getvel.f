@@ -7,14 +7,26 @@
       include "auxmpi.h"
 
 c
-      dimension nsons(nfath),        rinvsons(nfath),
-     &          velo(numnp,nflow),    velf(nfath,nflow),
-     &          velft(nfath,nflow),   
-     &          velbar(nfath,nflow),
-     &          y(numnp,ndof), 
-     &          ifath(numnp),
-     &          ilwork(nlwork),        iBC(numnp)
+c      dimension nsons(nfath),        rinvsons(nfath),
+c     &          velo(numnp,nflow),    velf(nfath,nflow),
+c     &          velft(nfath,nflow),   
+c     &          velbar(nfath,nflow),
+c     &          y(numnp,ndof), 
+c     &          ifath(numnp),
+c     &          ilwork(nlwork),        iBC(numnp)
 
+      ! Arsen
+      integer nsons(nfath),
+     &          ifath(numnp),
+     &          ilwork(nlwork), iBC(numnp)
+      real*8 y(numnp,ndof), velbar(nfath,nflow)
+      real*8, allocatable, dimension (:) :: rinvsons
+      real*8, allocatable, dimension (:,:) :: 
+     & velo,velf,velft
+	  
+      allocate(velo(numnp,nflow), velf(nfath,nflow),
+     & velft(nfath,nflow),
+     & rinvsons(nfath))
 c
 c  for now keep the compressible numbering in velbar
 c
@@ -121,11 +133,9 @@ c
          velbar(:,:)=tavef*velft(:,:)+(one-tavef)*velbar(:,:)        
       endif
       
+      deallocate(velo, velf,
+     & velft,
+     & rinvsons)
+	  
       return
       end
-
-
-
-      
-
-

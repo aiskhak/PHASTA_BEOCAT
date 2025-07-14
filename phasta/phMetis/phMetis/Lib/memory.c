@@ -8,18 +8,17 @@
  * Started 2/24/96
  * George
  *
- * $Id: memory.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: memory.c,v 1.2 1998/11/27 18:16:18 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
 * This function allocates memory for the workspace
 **************************************************************************/
 void AllocateWorkSpace(CtrlType *ctrl, GraphType *graph, int nparts)
-// long long int maxcore_temp ;
 {
   ctrl->wspace.pmat = NULL;
 
@@ -28,7 +27,7 @@ void AllocateWorkSpace(CtrlType *ctrl, GraphType *graph, int nparts)
     ctrl->wspace.vedegrees = NULL;
     ctrl->wspace.auxcore = (idxtype *)ctrl->wspace.edegrees;
 
-    ctrl->wspace.pmat = idxmalloc(nparts*nparts, "AllocateWorkSpace: pmat");
+    ctrl->wspace.pmat = idxmalloc(nparts*nparts, "AllocateWorkSpace: pmat"); 
 
     /* Memory requirements for different phases
           Coarsening
@@ -189,6 +188,7 @@ void InitGraph(GraphType *graph)
 
   graph->ncon = -1;
   graph->nvwgt = NULL;
+  graph->npwgts = NULL;
 
   graph->vsize = NULL;
 
@@ -202,7 +202,7 @@ void InitGraph(GraphType *graph)
 void FreeGraph(GraphType *graph) 
 {
 
-  GKfree(&graph->gdata, &graph->nvwgt, &graph->rdata, LTERM);
+  GKfree(&graph->gdata, &graph->nvwgt, &graph->rdata, &graph->npwgts, LTERM);
   free(graph);
 }
 

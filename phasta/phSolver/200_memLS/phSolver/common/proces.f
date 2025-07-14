@@ -173,8 +173,8 @@ c
 c.... call the semi-discrete predictor multi-corrector iterative driver
 c
 
-        if (myrank.eq.master) write(*,*) 'calling itrdrv!, myrank = ', myrank
-
+        if (myrank.eq.master) write(*,*)
+     & 'calling itrdrv!, myrank = ', myrank
 c       if (numpe.gt.1) call MPI_Barrier(MPI_COMM_WORLD, ierr)
 
         call itrdrv (y,              ac,             banma, 

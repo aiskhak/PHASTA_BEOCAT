@@ -9,11 +9,11 @@
  * Started 7/23/97
  * George
  *
- * $Id: minitpart2.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: minitpart2.c,v 1.1 1998/11/27 17:59:23 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 /*************************************************************************
 * This function computes the initial bisection of the coarsest graph

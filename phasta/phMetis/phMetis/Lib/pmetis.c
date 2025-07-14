@@ -9,11 +9,11 @@
  * Started 7/24/97
  * George
  *
- * $Id: pmetis.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: pmetis.c,v 1.1 1998/11/27 17:59:28 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -109,9 +109,9 @@ int MlevelRecursiveBisection(CtrlType *ctrl, GraphType *graph, int nparts, idxty
 
   nvtxs = graph->nvtxs;
   if (nvtxs == 0) {
-    printf("\t***Cannot bisect a graph with 0 vertices!\n\t***You are trying to partition a graph into too many parts!\n");
+    //no more nodes at this level, so return.
     return 0;
-  }
+  } 
 
   /* Determine the weights of the partitions */
   tvwgt = idxsum(nvtxs, graph->vwgt);

@@ -9,12 +9,11 @@
  * Started 7/25/97
  * George
  *
- * $Id: bucketsort.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: bucketsort.c,v 1.1 1998/11/27 17:59:11 karypis Exp $
  *
  */
 
-#include "metis.h"
-#include "struct.h"
+#include <metis.h>
 
 
 

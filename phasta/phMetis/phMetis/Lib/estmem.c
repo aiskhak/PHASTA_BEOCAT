@@ -9,12 +9,11 @@
  * Started 11/4/97
  * George
  *
- * $Id: estmem.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: estmem.c,v 1.1 1998/11/27 17:59:13 karypis Exp $
  *
  */
 
-#include "metis.h"
-#include "struct.h"
+#include <metis.h>
 
 /*************************************************************************
 * This function computes how much memory will be required by the various

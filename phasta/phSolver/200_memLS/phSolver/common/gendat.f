@@ -11,7 +11,6 @@ c
 c Zdenek Johan, Winter 1991.  (Fortran 90)
 c----------------------------------------------------------------------
 c
-      
         use readarrays          ! used to acess nBC
         use dtnmod
         use pointer_data
@@ -97,6 +96,7 @@ c
 c
 c.... read and generate the essential boundary conditions (BC array)
 c
+		
         call genBC  (iBC,   BC,   point2x,
      &               point2ilwork, point2iper)
         deallocate(nBC)

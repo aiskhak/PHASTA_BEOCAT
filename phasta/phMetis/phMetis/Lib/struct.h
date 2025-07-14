@@ -8,13 +8,10 @@
  * Started 9/26/95
  * George
  *
- * $Id: struct.h 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: struct.h,v 1.1 1998/11/27 17:59:31 karypis Exp $
  */
 
 /* Undefine the following #define in order to use short int as the idxtype */
-#ifndef STRUCT_H
-#define STRUCT_H
-
 #define IDXTYPE_INT
 
 /* Indexes are as long as integers for now */
@@ -24,7 +21,7 @@ typedef int idxtype;
 typedef short idxtype;
 #endif
 
-#define MAXIDX	(1<<8*sizeof(idxtype)-2)
+#define MAXIDX	((1<<8*sizeof(idxtype)-2))
 
 
 /*************************************************************************
@@ -100,7 +97,7 @@ typedef struct vedegreedef VEDegreeType;
 **************************************************************************/
 struct workspacedef {
   idxtype *core;			/* Where pairs, indices, and degrees are coming from */
-  long long int maxcore, ccore;
+  int maxcore, ccore;
 
   EDegreeType *edegrees;
   VEDegreeType *vedegrees;
@@ -252,4 +249,3 @@ typedef struct vpwgtdef VPInfoType;
 
 
 
-#endif // STRUCT_H

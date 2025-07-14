@@ -17,11 +17,15 @@ endif
 
 include $(DEVROOT)/Util/buildUtil/make.initial
 
+#CFLAGS   += -std=gnu89 -fcommon -Wno-implicit-function-declaration -Wno-int-conversion
+#CPPFLAGS += $(CFLAGS)
+#FFLAGS_FIXED = -fixed -fpp -w -DLINUX -DNDEBUG -DPARALLEL
+#FFLAGS_FREE = -free  -fpp -w -DLINUX -DNDEBUG -DPARALLEL
+
 CFLAGS   += -std=gnu89 -fcommon -Wno-implicit-function-declaration -Wno-int-conversion
 CPPFLAGS += $(CFLAGS)
-
-FFLAGS_FIXED = -fixed -fpp -diag-disable=5082,5149 -w -DLINUX -DNDEBUG -DPARALLEL
-FFLAGS_FREE = -free  -fpp -diag-disable=5082,5149 -w -DLINUX -DNDEBUG -DPARALLEL
+FFLAGS_FIXED += -fixed
+FFLAGS_FREE += -free
 
 # Add dependencies to include and link flags. Also add self to include flags.
 INCLUDES := $(INCLUDES) $(addsuffix /include,$(addprefix -I$(DEVROOT)/,$(DEPS)))

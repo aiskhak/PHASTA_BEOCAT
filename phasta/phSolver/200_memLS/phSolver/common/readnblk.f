@@ -32,6 +32,7 @@ c
       subroutine readnblk
 c
       use readarrays
+      use fncorpmod ! Arsen
       include "common.h"
 c
       real*8, allocatable :: xread(:,:), qread(:,:), acread(:,:)
@@ -39,6 +40,8 @@ c
       real*8, allocatable :: BCinpread(:,:)
       integer, allocatable :: iperread(:), iBCtmpread(:)
       integer, allocatable :: ilworkread(:), nBCread(:)
+      integer, target, allocatable :: fncorpread(:)   ! Arsen
+      integer fncorpsize  ! Arsen
       character*10 cname2, cname2nd
       character*8 mach2
       character*20 fmt1
@@ -47,6 +50,8 @@ c
       integer igeom, ibndc, irstin, ierr
       integer intfromfile(50) ! integers read from headers
       integer idirstep, idirtrigger  ! Igor September 2012
+ 
+      ideformwall = 0
 c
 c Assign number of error statistics
 c
@@ -182,7 +187,52 @@ c
      &                      nlwork,'integer', iotype)
          point2ilwork = ilworkread
          call ctypes (point2ilwork)
+! ######################################################################
+        ! Arsen here goes the code to aptly assign the ltg arrays...
+         svLSFlag = 1
+         if(svLSFlag.eq.1) then
+            fncorpsize = nshg
+
+            allocate(fncorp(fncorpsize))
+            call gen_ncorp(fncorp, ilworkread, nlwork, fncorpsize)
+   !
+   ! the  following code finds the global range of the owned nodes
+   !
+            maxowned=0
+           minowned=maxval(fncorp)
+           do i = 1,nshg      
+              if(fncorp(i).gt.0) then  ! don't consider remote copies
+                 maxowned=max(maxowned,fncorp(i))
+                 minowned=min(minowned,fncorp(i))
+              endif
+           enddo
+   
+   !  end of global range code
+            !write(*,*)'fncorp', fncorp
+            call commuInt(fncorp, point2ilwork, 1, 'out')
+      !      write(*,*)'called commuInt'
+          ! call commuInt(fncorp, point2ilwork, 1, 'out')
+           ncorpsize = fncorpsize
+      !      write(*,*)'ncorpsize', ncorpsize
+          endif
+!          write(*,*) 'svLSFlag is ', svLSFlag
+          if(svLSFlag.eq.1) then
+           allocate(ltg(ncorpsize))
+!            write(*,*) 'norpsize is ', ncorpsize
+            ltg(:)=fncorp(:)
+            !write(*,*)'myrank',myrank, 'ltg(:) is ', ltg
+          endif   
+! ######################################################################
       else
+       svLSFlag = 1 ! Arsen
+       if((svLSFlag.eq.1)) then
+            allocate(ltg(nshg))
+            do i =1,nshg
+                  ltg(i)=i
+            enddo
+      !      write(*,*)'myrank',myrank, 'ltg(:) is ', ltg
+      !      write(*,*) 'ilwork(:) is ', ilwork
+        endif  
          nlwork = 1
          allocate( point2ilwork(nlwork) )
          nshg0 = nshg

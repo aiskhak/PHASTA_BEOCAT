@@ -33,8 +33,9 @@ char dirname[25];
 char dirname2[50];
 
 extern "C" {
-    void
-    METIS_PartGraphKway(int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*);
+	#include <metis.h>
+//    void
+//    METIS_PartGraphKway(int*,int*,int*,int*,int*,int*,int*,int*,int*,int*,int*);
 //    METIS_PartGraphKway(int*,long int*,int*,int*,int*,int*,int*,int*,int*,int*,int*);
     void sonfath_( int*, int*, int*, int*, int*, int*, int*, int* );
 }

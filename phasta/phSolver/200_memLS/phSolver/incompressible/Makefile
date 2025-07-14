@@ -49,9 +49,10 @@ endif
 
 dirs := .
 mods  := stats.f
-DEPS := $(DEPS) phasta/phSolver/$(VERSION)/phSolver phasta/phastaIO phasta/phMetis\
-        phasta/shapeFunction LIBLES/1.5 memLS
-LIBS := common phastaIO metis shapeFunction les memLS
+DEPS := $(DEPS) phasta/phSolver/$(VERSION)/phSolver phasta/phastaIO phasta/phMetis phasta/shapeFunction phasta/svLS #memLS
+#        phasta/shapeFunction LIBLES/1.5 memLS
+#LIBS := common phastaIO metis shapeFunction les memLS
+LIBS := common phastaIO metis shapeFunction svLS #memLS
 
 ifeq ($(AMG),1)
     DEPS := $(DEPS) phasta/phSolver/$(VERSION)/phSolver

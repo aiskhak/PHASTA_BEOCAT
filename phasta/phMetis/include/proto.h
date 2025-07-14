@@ -1,1 +1,1 @@
-../phMetis/Lib/proto.h
+/homes/aiskhak/PHASTA_BEOCAT/phasta/phMetis/phMetis/Lib/proto.h

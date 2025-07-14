@@ -26,9 +26,9 @@ c
       use turbSA
       include "common.h"
 c
-      dimension iBC(nshg),                nsurf(nshg),
+      dimension iBC(nshg), nsurf(nshg),
      &            BC(nshg,ndofBC),
-     &            x(numnp,nsd),             ilwork(nlwork),
+     &            x(numnp,nsd), ilwork(nlwork),
      &            iper(nshg)
 c
 c BCinp for each point has:
@@ -39,9 +39,12 @@ c
 c Arrays in the following 1 line are now dimensioned in readnblk
 c        dimension BCinp(numpbc,ndof+7)
 c  
-      dimension BCtmp(nshg,ndof+7)
+      real*8, allocatable :: BCtmp(:,:)
       real*8, allocatable ::  wnrmp(:,:)
-      allocate ( wnrmp(nshg,3) )
+      allocate( BCtmp(nshg,ndof+7) )
+      allocate ( wnrmp(nshg,3))
+      wnrmp=0.d0
+      nsurf = 0
 c
 c ndof+7= 3(thermos) + (nsd-1)*(nsd+1) + nscalars + 1 (theta)
 c                       #vect *(vec dir +mag)
@@ -63,6 +66,7 @@ c
       if(any(BCtmp(:,12).ne.0)) then
          iabc=1
          allocate (acs(nshg,2))
+		 acs = 0.d0
          where (btest(iBC,10))
             acs(:,1) = cos(BCtmp(:,12)) 
             acs(:,2) = sin(BCtmp(:,12)) 
@@ -111,6 +115,7 @@ c
             endif
          enddo
       endif
+      deallocate (BCtmp)
 c     
 c.... return
 c
@@ -123,8 +128,6 @@ c
  1100 format(1p,2x,i5,3x,6(e12.5,1x))
 c
       end
-
-
 
 
 
@@ -209,6 +212,7 @@ c            write(*,*) 'Number of Surface_ID = ', nsidg
                nenbl = lcblkb(6,iblk)
                nshl = lcblkb(9,iblk)
                allocate( ienb(nshl) )
+			   ienb = 0
 c		write(*,*) 'myrank, iblk, npro = ', myrank, iblk, npro
                do i = 1, npro   ! loop over boundary elements
                   iBCB1=miBCB(iblk)%p(i,1)
@@ -600,6 +604,7 @@ c
                nenbl = lcblkb(6,iblk)
                nshl = lcblkb(9,iblk)
                allocate( ienb(nshl) )
+			   ienb = 0
                do i = 1, npro   ! loop over boundary elements
                   iBCB1=miBCB(iblk)%p(i,1)
                   iBCB2=miBCB(iblk)%p(i,2)
@@ -676,10 +681,10 @@ c
       integer idisp(numpe)      ! needed by mpi: see note below
       type llnod                ! structure for one node in a linked list
         integer :: value
-        type (llnod), pointer :: next
+        type (llnod), pointer :: next => null()
       end type llnod
-      type (llnod), pointer :: sidlist ! points to first elt of linked list
-      type (llnod), pointer :: sidelt  ! points to generic elt of linked list
+      type (llnod), pointer :: sidlist => null() ! points to first elt of linked list
+      type (llnod), pointer :: sidelt => null()  ! points to generic elt of linked list
       integer, allocatable :: sidmapl(:) ! list of surfID's on-proc
       integer, allocatable :: temp(:)    ! temp space
 c      integer iBCB(numelb,ndiBCB) ! column 1: naturalBC switches
@@ -689,6 +694,9 @@ c on-processor or globally, we will store the ID's as an open-ended
 c link list while we determine the total number of distinct ID's
       allocate (sidlist) ! allocate the first element of the sid 
                          ! linked list and point sidlist to it
+      sidlist%value = 0        ! or whatever “empty” sentinel you prefer
+      nullify( sidlist%next )  ! make the “next” pointer safe
+      nsidl = 0
       nsidl=0            ! initialize # of sids on this processor
       nsidg=0
       do iblk=1, nelblb  ! loop over boundary element blocks
@@ -715,6 +723,7 @@ c link list while we determine the total number of distinct ID's
                      allocate (sidelt % next)!   tack a new element to the end
                      sidelt => sidelt % next!    point to the new element
                      sidelt % value = iBCB2    ! record the new sid
+                     nullify( sidelt%next )     ! ensure the “next” pointer is safe
                   endif ! (really is a new sid)
                endif ! (first sid)
             endif ! (belt has a sid)
@@ -751,6 +760,7 @@ c
 c there will be some duplicate surface ID when we gather, so we
 c will use a temporary array
          allocate (temp(nsidt))
+		 temp = 0
          if (numpe.gt.1) then   ! multiple processors
 c we will gather surfID's from local on-proc sets to a global set
 c we will stack each processor's surfID list atop that of the previous 

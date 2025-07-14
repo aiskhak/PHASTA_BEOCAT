@@ -18,6 +18,9 @@ c
 c
         character*8  date
         character*80 card
+! Arsen
+        real :: rxinlt = 0.0, rxrecy = 0.0
+        real :: xlngth = 0.0, ylngth = 0.0, zlngth = 0.0
 
 c assigned in phasta.cc
 c        numpe=npe

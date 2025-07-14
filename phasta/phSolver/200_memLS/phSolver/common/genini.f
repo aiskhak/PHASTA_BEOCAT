@@ -54,6 +54,7 @@ c.... -------------------------->  Restart  <---------------------------
 c
 c.... read q from [RESTAR.INP], reset LSTEP
 c
+        impfile = 0
         call restar ('in  ',  y,  ac)
 c.... copy marker field from array y and restore sclr 2, Jun, Jul 2014
        if (ndof.eq. 7) then
@@ -101,6 +102,7 @@ c
            open(unit=816, file='Qhistor.dat',status='old')
            read (816,*) ntimeptpT
            allocate (QHistImp(ntimeptpT+1,numImpSrfs)) 
+		   QHistImp = 0
            do j=1,ntimeptpT+1
               read(816,*) (QHistImp(j,n),n=1,numImpSrfs) !read flow history
            enddo
@@ -112,6 +114,7 @@ c
            enddo
 
            allocate (pold(0:MAXSURF)) !for pressure part that depends on the history only
+		   pold = 0
         endif
         if (itvbc .gt. 0 ) then
            call initsetBC(iBC)

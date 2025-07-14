@@ -20,6 +20,9 @@ using namespace std;
 #include "SimDiscrete.h"
 #endif
 
+//Arsen 07/09/2025
+#include "SimLicense.h"  
+
 #ifdef MODELER_SHAPES
 #include "MeshSimShapes.h"
 #endif
@@ -71,10 +74,36 @@ main ( int argc,
     pProgress progress;
     MS_init();
 
-#ifdef SIM    
-    SimModel_start();
-    Sim_readLicenseFile(0);
+// Arsen 07/09/2025
+#ifdef SIM
+const char *features = "geomsim_core,geomsim_discrete,geomsim_parasolid,geomsim_adv,meshsim_surface,meshsim_volume,meshsim_adv,meshsim_adapt";
+
+const char *file = getenv("SIM_LICENSE_FILE");
+if (!file) {
+  fprintf(stderr, "ERROR: SIM_LICENSE_FILE not set");
+  exit(1);
+}
+
+SimLicense_start(features, file);
+
+  // 1) start the core
+  //SimModel_start();
+
+  // 2) grab your OEM license file path
+  //const char* licfile = getenv("SIM_LICENSE_FILE");
+  //if (!licfile) {
+  //  fprintf(stderr,
+  //          "ERROR: SIM_LICENSE_FILE not set; please export SIM_LICENSE_FILE=/path/to/simmetrix.lic\n");
+  //  exit(1);
+  //}
+
+  // 3) load the OEM‐style .lic
+  //Sim_readLicenseFile(licfile);
+
+  // 4) check out exactly the one OEM feature name from simmetrix.lic
+  //SimLicense_start("simmodeler_parasolid", licfile);
 #endif
+
     
     // default filenames
 
@@ -109,7 +138,8 @@ main ( int argc,
 #endif
 
     // initialize the attribute manager
-   cout << " Calling SModel_attManager " << endl;
+   //cout << " Calling SModel_attManager " << endl;
+   cout << " Calling GM_attManager " << endl;
     //pAManager SModel_attManager(pModel model);
    cout << " Progress Call back  " << endl;
 //    Progress_setDefaultCallback(progress);
@@ -148,7 +178,7 @@ main ( int argc,
     // Retrieve the attribute manager from the model
    cout << "  pAManager attmngr  " << endl;
     //pAManager attmngr = SModel_attManager(model);
-    pAManager attmngr = GM_attManager(model, true);
+    pAManager attmngr = GM_attManager(model, true);  // Arsen 07/09/2025
     if (attmngr == 0){
         cout << "Error: could not open attribute file " << fname << endl;
 

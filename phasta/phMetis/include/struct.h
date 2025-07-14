@@ -1,1 +1,1 @@
-../phMetis/Lib/struct.h
+/homes/aiskhak/PHASTA_BEOCAT/phasta/phMetis/phMetis/Lib/struct.h

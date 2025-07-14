@@ -8,12 +8,11 @@
  * Started 8/19/97
  * George
  *
- * $Id: fortran.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: fortran.c,v 1.1 1998/11/27 17:59:14 karypis Exp $
  *
  */
 
-#include "metis.h"
-#include "struct.h"
+#include <metis.h>
 
 
 /*************************************************************************

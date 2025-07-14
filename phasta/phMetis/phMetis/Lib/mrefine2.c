@@ -8,10 +8,10 @@
  * Started 7/24/97
  * George
  *
- * $Id: mrefine2.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mrefine2.c,v 1.1 1998/11/27 17:59:26 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************

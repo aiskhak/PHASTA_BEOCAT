@@ -8,11 +8,11 @@
  * Started 10/14/97
  * George
  *
- * $Id: parmetis.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: parmetis.c,v 1.1 1998/11/27 17:59:27 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -138,8 +138,10 @@ void METIS_NodeNDP(int nvtxs, idxtype *xadj, idxtype *adjncy, int npes,
 
     CompressGraph(&ctrl, &graph, nvtxs, xadj, adjncy, cptr, cind);
 
-    if (graph.nvtxs >= COMPRESSION_FRACTION*(nvtxs)) 
+    if (graph.nvtxs >= COMPRESSION_FRACTION*(nvtxs)) {
       ctrl.oflags--; /* We actually performed no compression */
+      GKfree(&cptr, &cind, LTERM);
+    }
     else if (2*graph.nvtxs < nvtxs && ctrl.nseps == 1)
       ctrl.nseps = 2;
   }

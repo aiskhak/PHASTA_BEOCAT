@@ -110,7 +110,8 @@ c
         common /conpar/ numnp,  numel,  numelb, numpbc, nen,    nfaces,
      &                  numflx, ndof,   iALE,   icoord, navier, iblk,
      &                  irs,    iexec,  necho,  ichem,  iRK,    nedof,
-     &                  nshg,   nnz,    istop,  nflow,  nnz_tot, idtn
+     &                  nshg,   nnz,    istop,  nflow,  nnz_tot, idtn,
+     &          ncorpsize, iownnodes ! Arsen
 
 c
         integer buintcfl,coalcon,update_coalcon,coaltimtrak,
@@ -194,7 +195,7 @@ c
      &                  LHSupd(6),  loctim(MAXTS),  deltol(MAXTS,2),
      &                  CFLfl_max, iCFLfl_maxelem, iflag_cfl_dt,
      &                  CFL_limit(2), timestart, CFLls_max, 
-     &                  iCFLls_maxelem, memLSFlag, CFLbuint_max,
+     &                  iCFLls_maxelem, svLSFlag, CFLbuint_max,
      &                  factor_buint, factor_CFLfl
 c
         common /intdat/ intg(2,MAXTS),  intpt(3),       intptb(3)

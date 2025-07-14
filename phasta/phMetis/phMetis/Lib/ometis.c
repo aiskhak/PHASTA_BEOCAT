@@ -9,11 +9,11 @@
  * Started 7/24/97
  * George
  *
- * $Id: ometis.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: ometis.c,v 1.1 1998/11/27 17:59:27 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -400,12 +400,12 @@ void MlevelNodeBisectionMultiple(CtrlType *ctrl, GraphType *graph, int *tpwgts, 
     bestwhere = idxmalloc(nvtxs, "MlevelNodeBisection2: bestwhere");
     mincut = nvtxs;
 
-    for (i=ctrl->nseps; i>0; i--) {
+    for (i=0; i<ctrl->nseps; i++) {
       MlevelNodeBisection(ctrl, graph, tpwgts, ubfactor);
 
       /* printf("%5d ", cgraph->mincut); */
 
-      if (graph->mincut < mincut) {
+      if (i == 0 || graph->mincut < mincut) {
         mincut = graph->mincut;
         idxcopy(nvtxs, graph->where, bestwhere);
       }
@@ -433,13 +433,13 @@ void MlevelNodeBisectionMultiple(CtrlType *ctrl, GraphType *graph, int *tpwgts, 
     bestwhere = idxmalloc(cnvtxs, "MlevelNodeBisection2: bestwhere");
     mincut = nvtxs;
 
-    for (i=ctrl->nseps; i>0; i--) {
+    for (i=0; i<ctrl->nseps; i++) {
       ctrl->CType += 20; /* This is a hack. Look at coarsen.c */
       MlevelNodeBisection(ctrl, cgraph, tpwgts, ubfactor);
 
       /* printf("%5d ", cgraph->mincut); */
 
-      if (cgraph->mincut < mincut) {
+      if (i == 0 || cgraph->mincut < mincut) {
         mincut = cgraph->mincut;
         idxcopy(cnvtxs, cgraph->where, bestwhere);
       }

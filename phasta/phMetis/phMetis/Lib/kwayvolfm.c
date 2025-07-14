@@ -6,11 +6,11 @@
  * Started 7/8/98
  * George
  *
- * $Id: kwayvolfm.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: kwayvolfm.c,v 1.1 1998/11/27 17:59:17 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -1160,7 +1160,7 @@ void ComputeKWayVolume(GraphType *graph, int nupd, idxtype *updind, idxtype *mar
       }
     }
 
-    myrinfo->gv = -MAXIDX;
+    myrinfo->gv = -(MAXIDX);
     for (k=0; k<myrinfo->ndegrees; k++) {
       if (myedegrees[k].gv > myrinfo->gv)
         myrinfo->gv = myedegrees[k].gv;

@@ -9,27 +9,27 @@ c
 c.... data type definitions
 c
          type r1d
-           real*8, pointer :: p(:)
+           real*8, pointer :: p(:) => null()
          end type
 c
          type r2d
-           real*8, pointer :: p(:,:)
+           real*8, pointer :: p(:,:) => null()
          end type
 c
          type r3d
-           real*8, pointer :: p(:,:,:)
+           real*8, pointer :: p(:,:,:) => null()
          end type
 c
          type i1d
-           integer, pointer :: p(:)
+           integer, pointer :: p(:) => null()
          end type
 c
          type i2d
-           integer, pointer :: p(:,:)
+           integer, pointer :: p(:,:) => null()
          end type
 c
          type i3d
-           integer, pointer :: p(:,:,:)
+           integer, pointer :: p(:,:,:) => null()
          end type
 c
 c.... pointer declarations

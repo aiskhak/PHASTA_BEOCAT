@@ -9,11 +9,11 @@
  * Started 7/23/97
  * George
  *
- * $Id: minitpart.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: minitpart.c,v 1.2 1998/11/30 15:08:37 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 /*************************************************************************
 * This function computes the initial bisection of the coarsest graph
@@ -39,7 +39,7 @@ void MocInit2WayPartition(CtrlType *ctrl, GraphType *graph, float *tpwgts, float
       errexit("Unknown initial partition type: %d\n", ctrl->IType);
   }
 
-  IFSET(ctrl->dbglvl, DBG_IPART, printf("Initial Cut: %d\n", graph->mincut));
+  IFSET(ctrl->dbglvl, DBG_IPART, printf("Initial Cut: %d [%d]\n", graph->mincut, graph->where[0]));
   IFSET(ctrl->dbglvl, DBG_TIME, stoptimer(ctrl->InitPartTmr));
   ctrl->dbglvl = dbglvl;
 
@@ -81,7 +81,7 @@ void MocGrowBisection(CtrlType *ctrl, GraphType *graph, float *tpwgts, float ubf
     MocBalance2Way(ctrl, graph, tpwgts, 1.02);
     MocFM_2WayEdgeRefine(ctrl, graph, tpwgts, 4); 
 
-    if (bestcut > graph->mincut) {
+    if (bestcut >= graph->mincut) {
       bestcut = graph->mincut;
       idxcopy(nvtxs, where, bestwhere);
       if (bestcut == 0)
@@ -150,7 +150,7 @@ void MocRandomBisection(CtrlType *ctrl, GraphType *graph, float *tpwgts, float u
     printf("]\n");
     */
 
-    if (bestcut > graph->mincut) {
+    if (bestcut >= graph->mincut) {
       bestcut = graph->mincut;
       idxcopy(nvtxs, where, bestwhere);
       if (bestcut == 0)

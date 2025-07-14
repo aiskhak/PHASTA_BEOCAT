@@ -8,10 +8,10 @@
  * Started 7/23/97
  * George
  *
- * $Id: mfm.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mfm.c,v 1.3 1998/11/30 14:50:44 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -254,9 +254,9 @@ void SelectQueue(int ncon, float *npwgts, float *tpwgts, int *from, int *cnum, P
     }
   }
 
-  /* printf("Selected %d(%d) -> %d\n", *from, *cnum, PQueueGetSize(&queues[*cnum][*from])); */
+  /* printf("Selected1 %d(%d) -> %d [%5f]\n", *from, *cnum, PQueueGetSize(&queues[*cnum][*from]), maxdiff); */
 
-  if (PQueueGetSize(&queues[*cnum][*from]) == 0) {
+  if (*from != -1 && PQueueGetSize(&queues[*cnum][*from]) == 0) {
     /* The desired queue is empty, select a node from that side anyway */
     for (i=0; i<ncon; i++) {
       if (PQueueGetSize(&queues[i][*from]) > 0) {
@@ -275,7 +275,7 @@ void SelectQueue(int ncon, float *npwgts, float *tpwgts, int *from, int *cnum, P
   }
 
   /* Check to see if you can focus on the cut */
-  if (maxdiff <= 0.0) {
+  if (maxdiff <= 0.0 || *from == -1) {
     maxgain = -100000;
 
     for (part=0; part<2; part++) {
@@ -288,6 +288,8 @@ void SelectQueue(int ncon, float *npwgts, float *tpwgts, int *from, int *cnum, P
       }
     }
   }
+
+  /* printf("Selected2 %d(%d) -> %d\n", *from, *cnum, PQueueGetSize(&queues[*cnum][*from])); */
 }
 
 

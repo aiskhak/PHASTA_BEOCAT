@@ -283,7 +283,7 @@ c  Now lets calculate Integral N_(a:e) d Gamma
 c
            do n = 1, nshlb
               nodlcl = lnode(n)
-              rl(:,nodlcl) = rl(:,nodlcl) + shpfun(:,nodlcl) * WdetJb(:)         
+              rl(:,nodlcl) = rl(:,nodlcl) + shpfun(:,nodlcl) * WdetJb(:)
            enddo
 
         enddo  ! quadrature point loop

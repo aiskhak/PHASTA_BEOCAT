@@ -37,11 +37,14 @@ export FFLAGS="-fpp -qopenmp -ffree-form -cpp -w -DLINUX -DNDEBUG -DPARALLEL -I$
 export INCLUDES="-I${PHASTA_INCLUDE_DIR} -I${MPICH_INC} -I${SIMMODELER_ROOT}/include ${INCLUDES}"
 export LDFLAGS="-L${MPICH_LIB} -qopenmp -Wl,-rpath,${MPICH_LIB} -L${SIMLIB_DIR} -Wl,-rpath,${SIMLIB_DIR} -L${PSDK_LIB} -Wl,-rpath,${PSDK_LIB} -ltirpc ${LDFLAGS}"
 
+export SIM_LICENSE_FILE=/homes/aiskhak/SimModeler/SimModeler2025.0-250628/simmetrix.lic #simmodsuite.lic
+echo "Using license file: $SIM_LICENSE_FILE"
+
 # uncomment line below to clean build
 isclean="clean"
 
 setup="gmake -j32 VERS=opt NODEP=1 setup"
-compile="gmake -j2 VERS=opt VERSION=200_memLS  NODEP=1 NOSHARED=1 $isclean"
+compile="gmake -j32 VERS=opt VERSION=200_memLS  NODEP=1 NOSHARED=1 $isclean"
 
 dest_path=$DEVROOT/phasta/phastaIO/phastaIO
 cd $dest_path

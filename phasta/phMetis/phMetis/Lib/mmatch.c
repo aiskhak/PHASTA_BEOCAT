@@ -9,11 +9,11 @@
  * Started 7/23/97
  * George
  *
- * $Id: mmatch.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mmatch.c,v 1.3 1998/11/30 14:50:44 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -458,7 +458,12 @@ float BetterVBalance(int ncon, int norm, float *vwgt, float *u1wgt, float *u2wgt
       sum2 += vwgt[i]+u2wgt[i];
     }
 
-    return ((max1-min1)/sum1) - ((max2-min2)/sum2);
+    if (sum1 == 0.0)
+      return 1;
+    else if (sum2 == 0.0)
+      return -1;
+    else
+      return ((max1-min1)/sum1) - ((max2-min2)/sum2);
   }
   else if (norm == 1) {
     sum1 = sum2 = 0.0;
@@ -480,7 +485,6 @@ float BetterVBalance(int ncon, int norm, float *vwgt, float *u1wgt, float *u2wgt
   else {
     errexit("Unknown norm: %d\n", norm);
   }
-
   return 0.0;
 }
 

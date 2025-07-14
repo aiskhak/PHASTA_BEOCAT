@@ -8,11 +8,11 @@
  * Started 7/25/97
  * George
  *
- * $Id: stat.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: stat.c,v 1.1 1998/11/27 17:59:31 karypis Exp $
  *
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -88,8 +88,9 @@ void ComputePartitionInfo(GraphType *graph, int nparts, idxtype *where)
 
   for (i=0; i<nparts; i++)
     kpwgts[i] = idxsum(nparts, padjncy+i*nparts);
-  printf("Min/Max/Avg/Bal # of adjacent     subdomains: %5d %5d %5d %7.3f\n",
-    kpwgts[idxamin(nparts, kpwgts)], kpwgts[idxamax(nparts, kpwgts)], idxsum(nparts, kpwgts)/nparts, 
+  printf("Min/Max/Avg/Bal # of adjacent     subdomains: %5d %5d %5.2f %7.3f\n",
+    kpwgts[idxamin(nparts, kpwgts)], kpwgts[idxamax(nparts, kpwgts)], 
+    1.0*idxsum(nparts, kpwgts)/(1.0*nparts), 
     1.0*nparts*kpwgts[idxamax(nparts, kpwgts)]/(1.0*idxsum(nparts, kpwgts)));
 
   for (i=0; i<nparts; i++)

@@ -8,10 +8,10 @@
  * Started 7/23/97
  * George
  *
- * $Id: mfm2.c 658 2006-04-21 00:45:24Z benfrantzdale $
+ * $Id: mfm2.c,v 1.2 1998/11/30 14:50:44 karypis Exp $
  */
 
-#include "metis.h"
+#include <metis.h>
 
 
 /*************************************************************************
@@ -301,7 +301,7 @@ void SelectQueue2(int ncon, float *npwgts, float *tpwgts, int *from, int *cnum,
   }
 
   /* Check to see if you can focus on the cut */
-  if (maxdiff <= 0.0) {
+  if (maxdiff <= 0.0 || *from == -1) {
     maxgain = -100000;
 
     for (j=0; j<2; j++) {

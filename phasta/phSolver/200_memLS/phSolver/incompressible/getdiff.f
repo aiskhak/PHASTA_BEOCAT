@@ -8,11 +8,10 @@ c-----------------------------------------------------------------------
       use  spat_var_eps !* for spatially varying epsilon_ls  
       include "common.h"
 
-      real*8  yl(npro,nshl,ndof), rmu(npro), xmudmi(npro,ngauss),
-     &        shape(npro,nshl),   rho(npro), cp(npro),
-     &        k_T(npro),
-     &        dwl(npro,nshl),     sclr(npro), sclr_ls(npro),!Mengnan
-     &        xl(npro,nenl,nsd),  evl(npro,nshl)
+      real*8 yl(npro,nshl,ndof),rmu(npro),xmudmi(npro,ngauss),
+     &shape(npro,nshl),rho(npro),cp(npro),
+     &k_T(npro),dwl(npro,nshl),sclr(npro),sclr_ls(npro),
+     &xl(npro,nenl,nsd),evl(npro,nshl)
       real*8 elem_size(npro)
       integer n, e
 
