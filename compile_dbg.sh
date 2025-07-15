@@ -51,6 +51,14 @@ export CPPFLAGS="-P -traditional-cpp ${CPPFLAGS}"
 #export FFLAGS="-g -O0 -init=snan -check bounds,uninit,pointer -DDEBUG -fpp -qopenmp -ffree-form -cpp -w -heap-arrays -traceback -DLINUX -DPARALLEL -I${PHASTA_INCLUDE_DIR} -I${SIMMODELER_ROOT}/include ${FFLAGS}"
 export FFLAGS="-g -O0 -DDEBUG -fpp -qopenmp -ffree-form -cpp -w -traceback -DLINUX -DPARALLEL -I${PHASTA_INCLUDE_DIR} -I${SIMMODELER_ROOT}/include ${FFLAGS}"
 export CXXFLAGS="-g -O0 -DDEBUG ${CXXFLAGS}"
+
+export FFLAGS="-I${DEVROOT}/phasta/phSolver/200_memLS/phSolver/common \
+               -I${PHASTA_INCLUDE_DIR} \
+               ${FFLAGS}"
+export CPPFLAGS="-I${DEVROOT}/phasta/phSolver/200_memLS/phSolver/common \
+                 -I${PHASTA_INCLUDE_DIR} \
+                 ${CPPFLAGS}"
+
 export FFLAGS_FIXED="$FFLAGS"
 export FFLAGS_FREE="$FFLAGS"
 
@@ -59,7 +67,29 @@ export INCLUDES="-I${PHASTA_INCLUDE_DIR} -I${MPICH_INC} -I${SIMMODELER_ROOT}/inc
 export LDFLAGS="-g -L${MPICH_LIB} -qopenmp -Wl,-rpath,${MPICH_LIB} -L${SIMLIB_DIR} -Wl,-rpath,${SIMLIB_DIR} -L${PSDK_LIB} -Wl,-rpath,${PSDK_LIB} -lpskernel -lSimLicense -ltirpc ${LDFLAGS}"
 
 # uncomment line below to clean build
-isclean="clean"
+#isclean="clean"
+
+# ─────────────────────────────────────────────
+# MANUALLY BUILD levlset_mod.f90 → levlset_mod.o + levlset_mod.mod
+# ─────────────────────────────────────────────
+(
+  cd "$DEVROOT/phasta/phSolver/200_memLS/phSolver/common"
+
+  echo ">>> compiling levlset_mod.f90 by hand…"
+
+  # invoke the compiler (ifx) via the FC env var, with your FFLAGS
+  $FC $FFLAGS \
+     -I. \
+     -c levlset_mod.f90 \
+     -o obj/x86_64_linux-IB-intelmpi/levlset_mod.o
+
+  # check we got a .mod
+  if [[ ! -f levlset_mod.mod ]]; then
+    echo "ERROR: levlset_mod.mod not found!"
+    exit 1
+  fi
+)
+# ─────────────────────────────────────────────
 
 setup="gmake -j32 VERS=dbg BUILD=debug NODEP=1 setup"
 compile="gmake -j32 VERS=dbg BUILD=debug VERSION=200_memLS NODEP=1 NOSHARED=1 $isclean"
@@ -115,12 +145,13 @@ PHASTA_METIS_LIB=${PHASTA_METIS_LIB} \
 $compile
 
 dest_path=$DEVROOT/phasta/phSolver/$VERSION/phSolver/
-PHASTA_METIS_INC=${PHASTA_METIS_INC} \
-PHASTA_METIS_LIB=${PHASTA_METIS_LIB} \
+#PHASTA_METIS_INC=${PHASTA_METIS_INC} \
+#PHASTA_METIS_LIB=${PHASTA_METIS_LIB} \
 $setup
 cd $dest_path
-PHASTA_METIS_INC=${PHASTA_METIS_INC} \
-PHASTA_METIS_LIB=${PHASTA_METIS_LIB} \
+#PHASTA_METIS_INC=${PHASTA_METIS_INC} \
+#PHASTA_METIS_LIB=${PHASTA_METIS_LIB} \
 $compile
 
 cd $DEVROOT
+

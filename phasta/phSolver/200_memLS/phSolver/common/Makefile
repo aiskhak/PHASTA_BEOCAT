@@ -51,7 +51,7 @@ endif
 
 dirs := .
 DEPS := $(DEPS) phasta/phastaIO 
-mods  := spebc.f pointer.f \
+mods  := cmass.f redist_freeze.f spebc.f pointer.f \
         turbsa.f \
         perprep.f local_mass.f \
         filtprep.f  pvsqbi.f \
@@ -59,7 +59,7 @@ mods  := spebc.f pointer.f \
         timedata.f \
         turbke.f\
         bctint.f readnblk.f spat_var_eps.f\
-	bubArr.f
+	bubArr.f fncorp.f levlset_mod.f90
 
 # Include standard makefile
 include $(DEVROOT)/Util/buildUtil/make.common

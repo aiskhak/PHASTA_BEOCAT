@@ -17,19 +17,41 @@ c
         use local_mass
         use spat_var_eps
         use timedata  ! for iblkts usage
+		
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+		
 c
         include "common.h"
         include "mpif.h"
 c
-        real*8 avgxcoordf(coalest), avgycoordf(coalest),
-     &         avgzcoordf(coalest), avgxcoordold2(coalest),
-     &         avgycoordold2(coalest), avgzcoordold2(coalest),
-     &         avgcoorddist(coalest,coalest),
-     &         app_time(coalest,2)
+        real*8, allocatable, dimension (:) ::
+     & avgxcoordf, avgycoordf,
+     & avgzcoordf, avgxcoordold2,
+     & avgycoordold2, avgzcoordold2
+        real*8, allocatable, dimension (:,:) :: 
+     & app_time, avgcoorddist
+       integer, allocatable, dimension (:,:) :: 
+     & event_tag
 
         real*8 itrtimestp, coalesc_time
-
-        integer event_tag(coalest,coalest)
+		
+      integer(c_int) :: coalest
+      real(c_double) :: avgxcoordold(100)
+      real(c_double) :: avgycoordold(100)
+      real(c_double) :: avgzcoordold(100)
+	  integer(c_int) :: coalcon_rem(100)
+      coalest = levlset%coalest
+      avgxcoordold = levlset%avgxcoordold
+      avgycoordold = levlset%avgycoordold
+      avgzcoordold = levlset%avgzcoordold
+      coalcon_rem  = levlset%coalcon_rem
+	  
+      allocate (avgxcoordf(coalest), avgycoordf(coalest),
+     & avgzcoordf(coalest), avgxcoordold2(coalest),
+     & avgycoordold2(coalest), avgzcoordold2(coalest))
+      allocate (app_time(coalest,2), avgcoorddist(coalest,coalest))
+	  allocate (event_tag(coalest,coalest))
 
 c!.... Initialize variables
         event_tag(:,:) = 0

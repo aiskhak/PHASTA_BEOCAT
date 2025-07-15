@@ -15,6 +15,11 @@ c  phvol(2)			: phasic volume (1-phase 1, 2-phase 2)
 c
 c----------------------------------------------------------------------
 c
+
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+		
+		
       include "common.h"
 c....Passed arrays
       dimension shape(npro,nshl),
@@ -25,6 +30,9 @@ c local arrays
 c
       integer iel, n
       real*8 Sclr(npro)
+	  
+      real(c_double) :: phvol(2)
+      phvol = levlset%phvol
 c
 c compute level set at gauss point
 c

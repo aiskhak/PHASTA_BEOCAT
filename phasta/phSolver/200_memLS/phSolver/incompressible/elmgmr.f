@@ -29,6 +29,10 @@ c
         use bub_track   ! access to bubble information array
 c        use bubboil_info  ! for boiling & condensation model
 c
+
+!		use iso_c_binding, only: c_double, c_int
+!		use levlset_mod, only: levlset
+
         include "common.h"
         include "mpif.h"
 c
@@ -71,13 +75,17 @@ c
         real*8 xarray(ibksiz), yarray(ibksiz), zarray(ibksiz)
         integer coordtag(ibksiz) !Passed arrays from e3ivar
         real*8 bubradius, bubradius2
-        real*8 avgxcoordf(coalest), avgycoordf(coalest),
-     &avgzcoordf(coalest)
+        real*8, dimension (100) :: avgxcoordf, 
+     &avgycoordf, avgzcoordf ! hardcoded coalest ???
 
 !----------------------------------------------------------------------
         real*8 elemvol_global(nelblk,numel)
         real*8, allocatable::   elemvol_local(:)
-      
+   
+	  
+!	  allocate (avgxcoordf(coalest), avgycoordf(coalest),
+!     &avgzcoordf(coalest))
+	  
 c
 c!.... set up the timer
 c
@@ -613,6 +621,9 @@ c
         use pointer_data
         use local_mass
 c
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+		
         include "common.h"
         include "mpif.h"
 c
@@ -635,6 +646,9 @@ c
         real*8, allocatable, dimension(:,:,:) :: xSebe
         real*8  cfl(nshg), CFLls_maxtmp, cflold(nshg)
         integer icflhits(nshg)
+		
+      real(c_double) :: phvol(2)
+      phvol = levlset%phvol
 c
 c.... set up the timer
 c

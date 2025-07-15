@@ -224,6 +224,12 @@ int input_fform(char inpfname[])
     inpdat.impl[0] = 10*solflow+solscalr*100+pcboiling.solheat;
 
     levlset.iLSet = ilset;
+printf(
+  "DEBUG [input_fform] parsed ilset=%d, levlset.iLSet=%d, address=%p\n",
+  ilset,
+  levlset.iLSet,
+  (void*)&levlset.iLSet
+);
     if( ilset > 0) {
     levlset.epsilon_ls = inp.GetValue("Number of Elements Across Interface");
     levlset.epsilon_lsd = inp.GetValue("Number of Elements Across Interface for Redistancing");

@@ -6,7 +6,6 @@
 // re-declared here, in a consistant structure.   
 /* Arsen
 #ifdef intel
-
 #define workfc WORKFC 
 #define fronts FRONTS 
 #define newdim NEWDIM
@@ -55,10 +54,11 @@
 #define amgvari AMGVARI
 #define pcboiling PCBOILING
 #define contactangle CONTACTANGLE
+#elif ( !defined ibm)*/
 
-#elif ( !defined ibm)
-*/
-#define workfc workfc_ 
+#include <FCMangle.h>
+
+#define workfc workfc_
 #define fronts fronts_ 
 #define newdim newdim_ 
 #define timer4 timer4_ 
@@ -67,16 +67,18 @@
 #define turbvar turbvar_ 
 #define turbvari turbvari_ 
 #define spebcvr spebcvr_ 
+#define sclrs sclrs_
 #define aerfrc aerfrc_ 
 #define astore astore_ 
 #define conpar conpar_ 
+#define levlset levlset_
+#define bubstudy bubstudy_
 #define shpdat shpdat_ 
-#define datpnt datpnt_ 
-#define errpar errpar_
+#define datpnt datpnt_
 #define elmpar elmpar_ 
+#define errpar errpar_
 #define genpar genpar_ 
-#define inpdat inpdat_ 
-#define intdat intdat_ 
+#define inpdat inpdat_
 #define mio mio_ 
 #define mioname mioname_ 
 #define itrpar itrpar_ 
@@ -97,21 +99,18 @@
 #define mtimer2 mtimer2_ 
 #define timer3 timer3_ 
 #define title title_ 
-#define sclrs sclrs_
-#define levlset levlset_
-#define bubstudy bubstudy_
+#define intdat intdat_ 
 #define nomodule nomodule_
+#define pcboiling pcboiling_
+#define contactangle contactangle_
 #define sequence sequence_
 #define amgvarr amgvarr_
 #define amgvari amgvari_
-#define pcboiling pcboiling_
-#define contactangle contactangle_
-
 //#endif
 
 #define MAXBLK   5000
 #define MAXSURF  20  
-#define MAXTS   100
+#define MAXTS    100
 #define MAXTOP   5
 #define MAXQPT   125
 #define MAXSH    125
@@ -119,22 +118,22 @@
 #define machin   'RS/6000'
 #define machfl   4
 #define zero   0.0000000000000000000000000000000d0
-#define pt125   0.1250000000000000000000000000000d0
+#define pt125  0.1250000000000000000000000000000d0
 #define pt25   0.2500000000000000000000000000000d0
 #define pt33   0.3333333333333333333333333333333d0
 #define pt39   0.3968502629920498686879264098181d0
-#define pt5   0.5000000000000000000000000000000d0
+#define pt5    0.5000000000000000000000000000000d0
 #define pt57   0.5773502691896257645091487805020d0
 #define pt66   0.6666666666666666666666666666667d0
 #define pt75   0.7500000000000000000000000000000d0
-#define one   1.0000000000000000000000000000000d0
+#define one    1.0000000000000000000000000000000d0
 #define sqt2   1.4142135623730950488016887242097d0
-#define onept5   1.5000000000000000000000000000000d0
-#define two   2.0000000000000000000000000000000d0
-#define three   3.0000000000000000000000000000000d0
+#define onept5 1.5000000000000000000000000000000d0
+#define two    2.0000000000000000000000000000000d0
+#define three  3.0000000000000000000000000000000d0
 #define four   4.0000000000000000000000000000000d0
 #define five   5.0000000000000000000000000000000d0
-#define pi   3.1415926535897932384626433832795d0
+#define pi     3.1415926535897932384626433832795d0
 
 #ifdef __cplusplus
 extern "C" {
@@ -143,37 +142,44 @@ extern "C" {
     int master;
     int numpe;
     int myrank;
-  } workfc ;
+  } workfc;
 
   extern struct { 
     int maxfront;
     int nlwork;
     int idirstep;
     int idirtrigger;
-  } fronts ;
+  } fronts;
 
   extern struct { 
     int numper;
     int nshgt;
     int nshg0;
-  } newdim ;
+  } newdim;
 
   extern struct { 
     double birth;
     double death;
     double comtim;
-  } timer4 ;
+  } timer4;
 
   extern struct { 
     double ttim[100];
-  } extrat ;
+  } extrat;
 
   extern struct {
-    double zoutsponge, radsponge, zinsponge, grthosponge, grthisponge;
+    double zoutsponge;
+    double radsponge;
+    double zinsponge;
+    double grthosponge;
+    double grthisponge;
     double betamax;
-    int spongecontinuity, spongemomentum1, spongemomentum2;
-    int spongeenergy, spongemomentum3;
-  } spongevar ;
+    int spongecontinuity;
+    int spongemomentum1;
+    int spongemomentum2;
+    int spongeenergy;
+    int spongemomentum3;
+  } spongevar;
 
   extern struct {
     double eles;
@@ -192,23 +198,20 @@ extern "C" {
     int idim;
     int nlist;
     int nintf[MAXTOP];
-  } turbvar ;
+  } turbvar;
 
   extern struct {
-    int irans, iles, idns, isubmod;
+    int irans;
+    int iles;
+    int idns;
+    int isubmod;
     int ifproj;
     int i2filt;
     int modlstats;
     int idis;
     int nohomog;
     int ierrsmooth;
-    /* wonder if we should include nintf(MAXTOP) and MAXTOP since its
-       in common.h */
-
-/*      int itwmod; */
-/*      double rtavei; */
-/*      int ierrcalc; */
-  } turbvari ;
+  } turbvari;
 
   extern struct { 
     int irscale;
@@ -220,27 +223,30 @@ extern "C" {
     double radcyl;
     double rbltin;
     double rvscal;
-  } spebcvr ;
+  } spebcvr;
 
   extern struct {
     double scdiff[5];
     double tdecay;
-    int nsclr,isclr,nsolt, nosource;
+    int nsclr;
+    int isclr;
+    int nsolt;
+    int nosource;
     int consrv_sclr_conv_vel;
   } sclrs;
 
   extern struct { 
-    double flxID[MAXSURF+1][10] ;
+    double flxID[MAXSURF+1][10];
     double Force[3];
     double HFlux;
     int nsrflist[MAXSURF+1];
     int isrfIM;
     double flxIDsclr[MAXSURF][4];
-  } aerfrc ;
+  } aerfrc;
 
   extern struct { 
     double a[100000];
-  } astore ;
+  } astore;
 
   extern struct { 
     int numnp;
@@ -269,8 +275,8 @@ extern "C" {
     int idtn;
     int ncorpsize;    // Arsen
     int iownnodes;    // Arsen
-  } conpar ;
-  
+  } conpar;
+
   extern struct { 
     double epsilon_ls;
     double epsilon_lsd;
@@ -289,7 +295,6 @@ extern "C" {
     double vfcontrcoeff;
     double C_int_cap;
     double epsilonBT;
-
     double xdistancesum;
     double ydistancesum;
     double zdistancesum;
@@ -365,11 +370,9 @@ extern "C" {
     double avgxcoordold[100];
     double avgycoordold[100];
     double avgzcoordold[100];
-
     int i_res_cf;
     int nzinBsum;
     int ntotnzinB;
-
     int iLSet;
     int iuse_vfcont_cap;
     int i_num_bubbles;
@@ -421,7 +424,7 @@ extern "C" {
     int nfath;
     int ntopsh;
     int nsonmax;
-  } shpdat ;
+  } shpdat;
 
   extern struct { 
     int mshp;
@@ -433,7 +436,7 @@ extern "C" {
     int mmut;
     int mrhot;
     int mxst;
-  } datpnt ;
+  } datpnt;
 
   extern struct { 
     int lelCat;
@@ -449,11 +452,11 @@ extern "C" {
     int nenbl;
     int intind;
     int mattyp;
-  } elmpar ;
+  } elmpar;
 
   extern struct {
     int numerr;
-  } errpar ;
+  } errpar;
 
   extern struct { 
     double E3nsd;
@@ -486,11 +489,10 @@ extern "C" {
     double CoalInvSigma;
     double presavg;
     int EntropyPressure;
-  } genpar ;
+  } genpar;
 
   extern struct { 
-    double epstol[8];  /* 1+ max number of scalars  (beginning of the
-                          end of time sequences) */
+    double epstol[8];  /* 1+ max number of scalars  (beginning of the end of time sequences) */
     double Delt[MAXTS];
     double CFLfl[MAXTS];
     double CFLsl[MAXTS];
@@ -508,12 +510,11 @@ extern "C" {
     double timestart; 
     double CFLls_max;
     int iCFLls_maxelem;
-    int memLSFlag;
+    int svLSFlag;
     double CFLbuint_max;
     double factor_buint;
     double factor_CFLfl;
-    int svLSFlag; //Arsen, added the svLSFlag
-  } inpdat ;
+  } inpdat;
 
   extern struct { 
     int iin;
@@ -536,7 +537,7 @@ extern "C" {
     int ivol;
     int istat;
     int ivhist;
-  } mio ;
+  } mio;
 
   extern struct { 
     double fin;
@@ -556,14 +557,14 @@ extern "C" {
     double fvol;
     double fstat;
     double fvhist;
-  } mioname ;
+  } mioname;
 
   extern struct { 
     double eGMRES;
     int lGMRES;
     int iKs;
     int ntotGM;
-  } itrpar ;
+  } itrpar;
 
   extern struct { 
     int mHBrg;
@@ -571,35 +572,37 @@ extern "C" {
     int myBrg;
     int mRcos;
     int mRsin;
-  } itrpnt ;
+  } itrpnt;
 
   extern struct { 
     double datmat[MAXTS][7][3];
     int matflg[MAXTS][6];
     int nummat;
     int mexist;
-  } matdat ;
+  } matdat;
 
   extern struct {
-    double tmu ;
-    double trho ;
-    double omu ;
-    double orho ;
-    double qrts0 ;
-    double qrts1 ;
-    int iramp ;
-    int nrts0 ;
-    int nrts1 ;
-  } matramp ;
+    double tmu;
+    double trho;
+    double omu;
+    double orho;
+    double qrts0;
+    double qrts1;
+    int iramp;
+    int nrts0;
+    int nrts1;
+  } matramp;
 
   extern struct { 
     double pr, Planck, Stephan, Nh, Rh, Rgas;
-    double gamma, gamma1, s0;
-    //, const, xN2, xO2;
-    //double yN2,    yO2,    Msh[5], cpsh[5],s0sh[5],h0sh[5];
-    //double Rs[5],  cps[5], cvs[5], h0s[5], Trot[5],sigs[5];
-    //double Tvib[5],g0s[5], dofs[5],ithm;
-  } mmatpar ;
+    double gamma, gamma1, s0, xO2, xN2, Msh[5], h0sh[5], Trot[5], sigs[5];
+	double Tvib[5], g0s[5], dofs[5], Rs[5], h0s[5], cpsh[5], cps[5], cvs[5];
+	double s0sh[5];
+    //, const;
+    //double yN2,    yO2,
+    //double   cps[5], ;
+    //,ithm;
+  } mmatpar;
 
   extern struct { 
     double ro;
@@ -613,28 +616,26 @@ extern "C" {
     int iofieldv;
     char iotype[80];
     int ioybar;
-    /*  int iostats; */
-/*      int ipresref; */
-  } outpar ;
+  } outpar;
 
   extern struct { 
     int mbeg;
     int mend;
     int mprec;
-  } point ;
+  } point;
 
   extern struct { 
     double epsM;
     int iabres;
-  } precis ;
+  } precis;
 
   extern struct { 
     int npro;
-  } propar ;
+  } propar;
 
   extern struct { 
     double resfrt;
-  } resdat ;
+  } resdat;
 
   extern struct { 
     int imap;
@@ -646,7 +647,7 @@ extern "C" {
     int iconvflow;
     int iconvsclr;
     int idcsclr[2];
-  } solpar ;
+  } solpar;
 
   extern struct { 
     double time;
@@ -669,12 +670,12 @@ extern "C" {
     double flmpr;
     double dtol[2];
     int iCFLworst;
-  } timdat ;
+  } timdat;
 
   extern struct { 
     int LCtime;
     int ntseq;
-  } timpar ;
+  } timpar;
 
   extern struct { 
     int numeqns[100];
@@ -688,11 +689,11 @@ extern "C" {
     double statsflow[6];
     double statssclr[6];
     int iverbose;
-  } incomp ;
+  } incomp;
 
   extern struct { 
     double ccode[13];
-  } mtimer1 ;
+  } mtimer1;
 
   extern struct { 
     double flops;
@@ -703,22 +704,24 @@ extern "C" {
     int icode;
     int icode2;
     int icode3;
-  } mtimer2 ;
+  } mtimer2;
 
   extern struct { 
     double cpu[11];
     double cpu0[11];
     int nacess[11];
-  } timer3 ;
+  } timer3;
 
   extern struct { 
     double title;
     int ititle;
-  } title ;
+  } title;
 
   extern struct {
     int intg[MAXTS][2];
-  }intdat;
+	int intpt[3];
+	int intptb[3];
+  } intdat;
 
   extern struct {
     double shvebct;
@@ -791,7 +794,7 @@ extern "C" {
     double ramg_eps;        /* AMG convergence eps               */
     double ramg_relax;       /* relaxation factor Gauss-Seidel/Jac*/
     double ramg_trunc;      /* truncation select */
- } amgvarr ;
+ } amgvarr;
   
   extern struct {
     int irun_amg;           /* Employ AMG feature solfar.f      */
@@ -812,7 +815,7 @@ extern "C" {
     int mlsdeg;             /* Polynomial Smoothing (MLS) degree */
     int iamg_scale;          /* control the scaling of PPE */
     int iamg_reduce;        /* Run a reduced case */
- } amgvari ;
+ } amgvari;
 
 #ifdef __cplusplus
 }

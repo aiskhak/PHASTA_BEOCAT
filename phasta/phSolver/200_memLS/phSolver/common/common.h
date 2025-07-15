@@ -7,88 +7,12 @@ c Input variables that have been previously declared in common_c.h have to be
 c re-declared here, in a consistant block. 
 c
 c Zdenek Johan, Winter 1991.  (Fortran 90)
-c----------------------------------------------------------------------
-
-	IMPLICIT REAL*8 (a-h,o-z)
-c
-c.... parameters  IF YOU CHANGE THES YOU HAVE TO CHANGE THEM IN
-c                  common_c.h ALSO
-c
-        parameter     ( MAXBLK = 5000, MAXTS = 100)
-        parameter     ( MAXSH = 32, NSD = 3 )
 c
 c  The five types of region topology are  1= Tet, 2=Hex, 3= Wedge (tri-start),
 c                                         4= Wedge (quad-first) 5=pyramid
 c
 c  The two types of face topology are  1= tri, 2=quad
 c
-        parameter     ( MAXTOP = 6, MAXSURF=20 )
- 
-c the common block nomodule holds all the things which have been removed
-c from different modules
-     
-        integer seqsize, stepseq
-        integer consrv_sclr_conv_vel
-        integer spongecontinuity, spongemomentum1, spongemomentum2
-        integer spongeenergy, spongemomentum3
-	common /amgvarr/strong_eps,ramg_eps,ramg_relax,ramg_trunc 
-	common /amgvari/irun_amg,irun_amg_sa,irun_amg_prec,
-     &                  iamg_verb,
-     &                  iamg_neg_sten,iamg_nlevel,
-     &                  iamg_c_solver,
-     &                  iamg_prescale,iamg_init,
-     &        iamg_ppe_frez, iamg_setup_frez, iamg_iai_frez,
-     &        iamg_interp,maxnev,maxncv,mlsdeg,iamg_scale,iamg_reduce
-
-        integer tvbcswitch
-        common /nomodule/ shvebct, bcttimescale,
-     &  ValueListResist(0:MAXSURF), rhovw,thicknessvw, evw, rnuvw,
-     &  rshearconstantvw, betai, icardio, itvn, ipvsq, numResistSrfs, 
-     &  nsrflistResist(0:MAXSURF), numImpSrfs, nsrflistImp(0:MAXSURF),impfile,
-     &  ideformwall, iwallmassfactor,iwallstiffactor,
-     &  tvbcswitch,ibcb_conv_p, ibcb_conv_p_norm, itvbc, iRBCT
-        common /pcboiling/ bubboil,solheat,bubgrow,h_fg,T_sat,epsilon_lst,breakup2w,
-     &        breaksclr,
-     &        delt_T(100),numshell_out(100),numshell_in(100),
-     &        bubble_vol(100),bubble_tempG(100),bubbleID(100),
-     &        numshell_out2(100)
-        common /contactangle/ CA_flag, theta_adv, theta_rec, Forcecont, 
-     &                        stretch, Fapp_thick, Fapp_heigh, CAramp,
-     &                        CAF_upper, CAF_interval, CA_startT,bubble_avgCA
-        common /sequence/ seqsize, stepseq(100)
-	common /workfc/ master, numpe, myrank
-	common /fronts/ maxfront, nlwork, idirstep, idirtrigger
-	common /newdim/ numper, nshgt, nshg0
-	common /timer4/ birth, death, comtim
-        common /extrat/ ttim(100)
-        common /spongevar/ zoutSponge, radSponge, zinSponge,
-     &            grthOSponge,grthISponge,betamax,
-     &            spongecontinuity, spongemomentum1, spongemomentum2,
-     &            spongeenergy, spongemomentum3
-        common /turbvar/ eles,ylimit(3,9), rmutarget, pzero,  wtavei, 
-     &                   dtavei, dke,  fwr1, flump,
-     &                   ierrcalc, ihessian, itwmod, ngaussf,idim,
-     &                   nlist, nintf(MAXTOP)
-        common /turbvari/iRANS, iLES, iDNS, isubmod, ifproj, i2filt,
-     &                   modlstats, idis, nohomog, ierrsmooth
-        common /spebcvr/ irscale, intpres, plandist,
-     &            thetag, ds, tolerence, radcyl, rbltin, rvscal
-
-        common /sclrs/ scdiff(5),tdecay,nsclr,isclr,nsolt,nosource,
-     &            consrv_sclr_conv_vel
-c 
-c.... common blocks
-c
-      parameter (MAXQPT = 125)
-c
-c.... common blocks for hierarchic basis functions
-c
-      common /intpt/  Qpt (MAXTOP ,4,MAXQPT), Qwt (MAXTOP ,MAXQPT), 
-     &                Qptb(MAXTOP,4,MAXQPT),  Qwtb(MAXTOP,MAXQPT), 
-     &                nint(MAXTOP),           nintb(MAXTOP),
-     &                ngauss,                 ngaussb,   intp,
-     &                   maxnint
- 
 c nsrflist is a binary switch that tells us if a given srfID should be
 c included in the consistent flux calculation.  It starts from zero
 c since we need to be able to handle/ignore surfaces with no srfID attached
@@ -96,191 +20,61 @@ c
 c flxID(numfluxes,nIDs+1)
 c numfluxes = area, mass, fx, fy, fz, heat, scalar_flux_{1,2,3,4}
 c nIDs currently set to MAXSURF, each surface has its own
-c
-        common /aerfrc/ flxID(10,0:MAXSURF), Force(3),HFlux, 
-     &                  nsrflist(0:MAXSURF), isrfIM, 
-     &                  flxIDsclr(4,MAXSURF)
-c
-        common /astore/ a(100000)
-c
-        common /blkdat/ lcblk(10,MAXBLK+1),      lcblkb(10,MAXBLK+1)
-c
-        common /mbndnod/ mnodeb(9,8,3)
-c
-        common /conpar/ numnp,  numel,  numelb, numpbc, nen,    nfaces,
-     &                  numflx, ndof,   iALE,   icoord, navier, iblk,
-     &                  irs,    iexec,  necho,  ichem,  iRK,    nedof,
-     &                  nshg,   nnz,    istop,  nflow,  nnz_tot, idtn,
-     &          ncorpsize, iownnodes ! Arsen
+c----------------------------------------------------------------------
 
-c
-        integer buintcfl,coalcon,update_coalcon,coaltimtrak,
-     &          coalcon_rem, iBT, iFT, icoalCtrl
-     
-        integer, parameter :: coalest = 100 ! modified, Arsen, this should be defined 
+        IMPLICIT REAL*8(A-H,O-Z)
 
-        common /levlset/ epsilon_ls, epsilon_lsd, dtlset, dtlset_cfl,
-     &                   redist_toler, redist_toler_curr,
-     &                   r_int_buffer,r_int_elem_size, phvol(2),
-     &                   AdjRedistVelCFL, BubRad, vf_target, 
-     &                   C_int_adjust, vf_now, vfcontrcoeff, 
-     &                   C_int_cap, epsilonBT, 
-     &                   xdistancesum, ydistancesum, zdistancesum,
-     &                   totalxdist, totalydist, totalzdist,
-     &                   avgxdistance, avgydistance, avgzdistance,
-     &                   avgxdistold, avgydistold, avgzdistold,
-     &                   xdistideal, ydistideal, zdistideal,
-     &                   dx_new, dy_new, dz_new, ddxvel, ddyvel, ddzvel,
-     &                   xvelsum, yvelsum, zvelsum, totalxvel, totalyvel, totalzvel,
-     &                   avgxvel, avgyvel, avgzvel, avgxvelold, avgyvelold, avgzvelold,
-     &                   velwghtsum, totalvelwght, bubvolsum,
-     &                   totbubvol, denssum, totbubdens, xcforcesum, ycforcesum,
-     &                   zcforcesum, totalxcforce, totalycforce, totalzcforce,
-     &                   totalxcforceold, totalycforceold, totalzcforceold,
-     &                   avgxcforce, avgycforce, avgzcforce, avgxcforceold,
-     &                   avgycforceold, avgzcforceold, avgxcf, avgycf, avgzcf,
-     &                   x_c_f, y_c_f, z_c_f, xforcenewtsum, yforcenewtsum,
-     &                   zforcenewtsum, totxfnewtsum, totyfnewtsum, totzfnewtsum,
-     &                   xcfnewtons, ycfnewtons, zcfnewtons, rholiq, rhogas,
-     &                   coalbubrad,
-     &                   avgxcoordold(100), avgycoordold(100),
-     &                   avgzcoordold(100),
-     &                   i_res_cf, nzinBsum, ntotnzinB,
-     &                   iLSet, iuse_vfcont_cap, i_num_bubbles,
-     &                   ivconstraint, iSolvLSSclr1, iSolvLSSclr2,
-     &                   i_redist_loop_flag, 
-     &                   i_redist_max_iter, i_spat_var_eps_flag,
-     &                   i_dtlset_cfl, i_check_prox, i_gradphi,
-     &                   i_focusredist, i_AdjRedistVel, buintcfl,
-     &                   iBT, iFT, icoalCtrl, coalcon, update_coalcon, coaltimtrak,
-     &                   coalest, coalcon_rem(100)
-
-c
-
-        common /bubstudy/ xcfcoeff(10), ycfcoeff(9), zcfcoeff(9),
-     &                    DomainSize(6),
-     &                    shear_rate, vel_centre, y_drag_flip,
-     &                    iCForz, iCForz_where, numts_histyavg,
-     &  		  iClrLiq, iBK, Nbubtot, Nghost 
-
-c 
-        common /shpdat/ nshape, nshapeb, maxshb,
-     &                  nshl, nshlb,nfath,  ntopsh,  nsonmax
-c
-        common /datpnt/ mshp,   mshgl,  mwght,  mshpb,  mshglb, mwghtb,
-     &                  mmut,   mrhot,  mxst
-c
-        common /melmcat/ mcsyst, melCat, nenCat(8,3),    nfaCat(8,3)
-c
-        common /errpar/ numerr
-c
-        common /elmpar/ lelCat, lcsyst, iorder, nenb,   
-     &                  nelblk, nelblb, ndofl,  nsymdl, nenl,   nfacel,
-     &                  nenbl,  intind, mattyp
-c
-
-        integer EntropyPressure
-
-        common /genpar/ E3nsd,  I3nsd,  nsymdf, ndofBC, ndiBCB, ndBCB,
-     &                  Jactyp, jump,   ires,   iprec,  iprev,  ibound,
-     &                  idiff,  lhs,    itau,   ipord,  ipred,  lstres,
-     &                  iepstm, dtsfct, dtsfctsclr, taucfct, ibksiz,
-     &                  iabc, isurf, idflx, Bo, CoalInvSigma, presavg,
-     &                  EntropyPressure
-
-c
-        common /inpdat/ epstol(8),  Delt(MAXTS),    CFLfl(MAXTS),
-     &                  CFLsl(MAXTS),   nstep(MAXTS),   niter(MAXTS),
-     &                  impl(MAXTS),    rhoinf(MAXTS),
-     &                  LHSupd(6),  loctim(MAXTS),  deltol(MAXTS,2),
-     &                  CFLfl_max, iCFLfl_maxelem, iflag_cfl_dt,
-     &                  CFL_limit(2), timestart, CFLls_max, 
-     &                  iCFLls_maxelem, svLSFlag, CFLbuint_max,
-     &                  factor_buint, factor_CFLfl
-c
-        common /intdat/ intg(2,MAXTS),  intpt(3),       intptb(3)
-c
-        common /mintpar/ indQpt(3,3,4),  numQpt(3,3,4),
-     &                  intmax
-c
-        common /mio    / iin,    igeom,  ipar,   ibndc,  imat,   iecho,
-     &                  iout,   ichmou, irstin, irstou, ihist,  iflux,
-     &                  ierror, itable, iforce, igraph, itime,  ivol,
-     &                  istat, ivhist
-c
-c /*         common /andres/ fwr1,ngaussf,idim,nlist */
-
-        character*80    fin,    fgeom,  fpar,   fbndc,  fmat,   fecho,
-     &                  frstin, frstou, fhist,  ferror, ftable, fforce,
-     &                  fgraph, ftime,  fvol,   fstat,  fvhist, iotype     
-        common /mioname/ fin,    fgeom,  fpar,   fbndc,  fmat,   fecho,
-     &                  frstin, frstou, fhist,  ferror, ftable, fforce,
-     &                  fgraph, ftime,  fvol,   fstat,  fvhist
-c
-        common /itrpar/ eGMRES, lGMRES, iKs,    ntotGM
-c
-        common /itrpnt/ mHBrg,  meBrg,  myBrg,  mRcos,  mRsin
-c
-        REAL*8          Nh, Msh
-        common /mmatpar/ pr,     Planck, Stefan, Nh,     Rh,     Rgas,
-     &                  gamma,  gamma1, s0,     const,  xN2,    xO2,
-     &                  yN2,    yO2,    Msh(5), cpsh(5),s0sh(5),h0sh(5),
-     &                  Rs(5),  cps(5), cvs(5), h0s(5), Trot(5),sigs(5),
-     &                  Tvib(5),g0s(5), dofs(5),ithm
-c
-        logical         mexist
-        common /matdat/ datmat(3,7,MAXTS),      matflg(6,MAXTS),
-     &                  nummat,                 mexist
-c
-	common /matramp/ tmu, trho, omu, orho, qrts0, qrts1, 
-     &                   iramp, nrts0, nrts1
-c
-        common /outpar/ ro,     vel,    temper, press,  entrop, ntout,
-     &                  ioform, iowflux, iofieldv, iotype, ioybar
-c
-        common /point / mbeg,   mend,   mprec
-c
-        common /precis/ epsM,   iabres
-c
-        common /propar/ npro
-c
-        common /resdat/ resfrt
-c
-        common /solpar/ imap,   ivart,  iDC,    iPcond, Kspace, nGMRES,
-     &                  iconvflow, iconvsclr, idcsclr(2)
-c
-        common /msympar/ indsym(5,5)
-c
-        common /timdat/ time,   CFLfld, CFLsld, Dtgl,   Dtmax,  alpha,
-     &                  etol,   lstep,  ifunc,  itseq,  istep,  iter,
-     &                  nitr,   almi,   alfi,   gami,   flmpl,  flmpr,
-     &                  dtol(2), iCFLworst
-c
-        common /timpar/ LCtime, ntseq
-c
-        common /incomp/ numeqns(100), minIters, maxIters, 
-     &                  iprjFlag,     nPrjs,    ipresPrjFlag, nPresPrjs,
-     &                  prestol,      statsflow(6), statssclr(6),
-     &                  iverbose
-c
-        character*8     ccode
-        common /mtimer1/ ccode(13)
-c
-        integer       flops,  gbytes, sbytes
-        common /mtimer2/ flops,  gbytes, sbytes, iclock, icd,    icode,
-     &                  icode2, icode3
-c
-        common /timer3/ cpu(11),        cpu0(11),       nacess(11)
-c
-        character*80    title,  ititle
-        common /title / title,  ititle
-c
-        character*8     machin
-        parameter     ( machin = 'RS/6000 ' )
-        parameter     ( machfl = 4 )
- 
-        parameter 
-     &           ( zero   = 0.0000000000000000000000000000000d0,
+        character*80 fin, fgeom, fpar, fbndc, fmat, fecho,
+     & frstin, frstou, fhist, ferror, ftable, fforce,
+     & fgraph, ftime, fvol, fstat, fvhist, iotype, title, ititle
+        character*8 machin, ccode
+        integer EntropyPressure, flops, gbytes,
+     & sbytes, seqsize, stepseq, consrv_sclr_conv_vel
+     & spongecontinuity, spongemomentum1, spongemomentum2
+     & spongeenergy, spongemomentum3, tvbcswitch
+        integer MAXBLK, MAXSURF, MAXTS, MAXTOP, MAXQPT, MAXSH, NSD, 
+     & machfl
+        real*8 zero,pt125,pt25,pt33,pt39,pt5,pt57,pt66,pt75,one,sqt2,
+     & onept5,two,three,four,five,pi
+        real*8 Nh, Msh
+        logical mexist
+		
+!        real*8 epsilon_ls, epsilon_lsd, dtlset, dtlset_cfl redist_toler,
+!     & redist_toler_curr, r_int_buffer, r_int_elem_size, phvol,
+!     & AdjRedistVelCFL, BubRad, vf_target, C_int_adjust, vf_now,
+!     & vfcontrcoeff, C_int_cap, epsilonBT, xdistancesum, ydistancesum,
+!     & zdistancesum, totalxdist, totalydist, totalzdist, avgxdistance,
+!     & avgydistance, avgzdistance, avgxdistold, avgydistold, avgzdistold,
+!     & xdistideal, ydistideal, zdistideal, dx_new, dy_new, dz_new,
+!     & ddxvel, ddyvel, ddzvel, xvelsum, yvelsum, zvelsum, totalxvel,
+!     & totalyvel, totalzvel, avgxvel, avgyvel, avgzvel, avgxvelold,
+!     & avgyvelold, avgzvelold, velwghtsum, totalvelwght, bubvolsum,
+!     & totbubvol, denssum, totbubdens, xcforcesum, ycforcesum,
+!     & zcforcesum, totalxcforce, totalycforce, totalzcforce,
+!     & totalxcforceold, totalycforceold, totalzcforceold, avgxcforce,
+!     & avgycforce, avgzcforce, avgxcforceold, avgycforceold,
+!     & avgzcforceold, avgxcf, avgycf, avgzcf, x_c_f, y_c_f,
+!     & z_c_f, xforcenewtsum, yforcenewtsum, zforcenewtsum,
+!     & totxfnewtsum, totyfnewtsum, totzfnewtsum, xcfnewtons, ycfnewtons,
+!     & zcfnewtons, rholiq, rhogas, coalbubrad, avgxcoordold,
+!     & avgycoordold, avgzcoordold
+!        integer i_res_cf, nzinBsum, ntotnzinB, iLSet, iuse_vfcont_cap,
+!     & i_num_bubbles, ivconstraint, iSolvLSSclr1, iSolvLSSclr2,
+!     & i_redist_loop_flag, i_redist_max_iter, i_spat_var_eps_flag,
+!     & i_dtlset_cfl, i_check_prox, i_gradphi, i_focusredist,
+!     & i_AdjRedistVel, buintcfl, iBT, iFT, icoalCtrl, coalcon,
+!     & update_coalcon, coaltimtrak, coalest, coalcon_rem
+		
+        parameter (MAXBLK  = 5000,
+     &             MAXSURF = 20,
+     &             MAXTS   = 100,
+     &             MAXTOP  = 6,
+     &             MAXQPT  = 125,
+     &             MAXSH   = 32, 
+     &             NSD     = 3,
+     &             machin  = 'RS/6000 ',
+     &             machfl  = 4)
+        parameter (zero   = 0.0000000000000000000000000000000d0,
      &             pt125  = 0.1250000000000000000000000000000d0,
      &             pt25   = 0.2500000000000000000000000000000d0,
      &             pt33   = 0.3333333333333333333333333333333d0,
@@ -297,6 +91,165 @@ c
      &             four   = 4.0000000000000000000000000000000d0,
      &             five   = 5.0000000000000000000000000000000d0,
      &             pi     = 3.1415926535897932384626433832795d0)
+
+c COMMON - MUST BE THE SAME AS COMMON_C.H !!!
+        common /workfc/ master, numpe, myrank
+        common /fronts/ maxfront, nlwork, idirstep, idirtrigger
+        common /newdim/ numper, nshgt, nshg0
+        common /timer4/ birth, death, comtim
+        common /extrat/ ttim(100)
+        common /spongevar/ zoutsponge, radsponge, zinsponge,
+     & grthosponge, grthisponge, betamax,
+     & spongecontinuity, spongemomentum1, spongemomentum2,
+     & spongeenergy, spongemomentum3
+        common /turbvar/ eles, ylimit(3,9), rmutarget, pzero, wtavei, 
+     & dtavei, dke, fwr1, flump,
+     & ierrcalc, ihessian, itwmod, ngaussf, idim,
+     & nlist, nintf(MAXTOP)
+        common /turbvari/ irans, iles, idns, isubmod, ifproj, i2filt,
+     & modlstats, idis, nohomog, ierrsmooth
+        common /spebcvr/ irscale, intpres, plandist,
+     & thetag, ds, tolerence, radcyl, rbltin, rvscal
+        common /sclrs/ scdiff(5), tdecay, nsclr, isclr, nsolt, nosource,
+     & consrv_sclr_conv_vel
+        common /aerfrc/ flxID(10,0:MAXSURF), Force(3), HFlux, 
+     & nsrflist(0:MAXSURF), isrfIM, flxIDsclr(4,MAXSURF)
+        common /astore/ a(100000)
+        common /conpar/ numnp, numel, numelb, numpbc, nen, nfaces,
+     & numflx, ndof, iALE, icoord, navier, iblk,
+     & irs, iexec, necho, ichem, iRK, nedof,
+     & nshg, nnz, istop, nflow, nnz_tot, idtn,
+     & ncorpsize, iownnodes ! Arsen
+!        common /levlset/ epsilon_ls, epsilon_lsd, dtlset, dtlset_cfl redist_toler,
+!     & redist_toler_curr, r_int_buffer, r_int_elem_size, phvol(2),
+!     & AdjRedistVelCFL, BubRad, vf_target, C_int_adjust, vf_now,
+!     & vfcontrcoeff, C_int_cap, epsilonBT, xdistancesum, ydistancesum,
+!     & zdistancesum, totalxdist, totalydist, totalzdist, avgxdistance,
+!     & avgydistance, avgzdistance, avgxdistold, avgydistold, avgzdistold,
+!     & xdistideal, ydistideal, zdistideal, dx_new, dy_new, dz_new,
+!     & ddxvel, ddyvel, ddzvel, xvelsum, yvelsum, zvelsum, totalxvel,
+!     & totalyvel, totalzvel, avgxvel, avgyvel, avgzvel, avgxvelold,
+!     & avgyvelold, avgzvelold, velwghtsum, totalvelwght, bubvolsum,
+!     & totbubvol, denssum, totbubdens, xcforcesum, ycforcesum,
+!     & zcforcesum, totalxcforce, totalycforce, totalzcforce,
+!     & totalxcforceold, totalycforceold, totalzcforceold, avgxcforce,
+!     & avgycforce, avgzcforce, avgxcforceold, avgycforceold,
+!     & avgzcforceold, avgxcf, avgycf, avgzcf, x_c_f, y_c_f,
+!     & z_c_f, xforcenewtsum, yforcenewtsum, zforcenewtsum,
+!     & totxfnewtsum, totyfnewtsum, totzfnewtsum, xcfnewtons, ycfnewtons,
+!     & zcfnewtons, rholiq, rhogas, coalbubrad, avgxcoordold(100),
+!     & avgycoordold(100), avgzcoordold(100),
+!     & i_res_cf, nzinBsum, ntotnzinB, iLSet, iuse_vfcont_cap,
+!     & i_num_bubbles, ivconstraint, iSolvLSSclr1, iSolvLSSclr2,
+!     & i_redist_loop_flag, i_redist_max_iter, i_spat_var_eps_flag,
+!     & i_dtlset_cfl, i_check_prox, i_gradphi, i_focusredist,
+!     & i_AdjRedistVel, buintcfl, iBT, iFT, icoalCtrl, coalcon,
+!     & update_coalcon, coaltimtrak, coalest, coalcon_rem(100)
+        common /bubstudy/ xcfcoeff(10), ycfcoeff(9), zcfcoeff(9),
+     & DomainSize(6), shear_rate, vel_centre, y_drag_flip,
+     & iCForz, iCForz_where, numts_histyavg,
+     & iClrLiq, iBK, Nbubtot, Nghost 
+        common /shpdat/ nshape, nshapeb, maxshb,
+     & nshl, nshlb, nfath, ntopsh, nsonmax
+        common /datpnt/ mshp, mshgl, mwght, mshpb, mshglb, mwghtb,
+     & mmut, mrhot, mxst
+        common /elmpar/ lelCat, lcsyst, iorder, nenb,   
+     & nelblk, nelblb, ndofl, nsymdl, nenl, nfacel,
+     & nenbl, intind, mattyp
+        common /errpar/ numerr
+        common /genpar/ E3nsd, I3nsd, nsymdf, ndofBC, ndiBCB, ndBCB,
+     & Jactyp, jump, ires, iprec, iprev, ibound,
+     & idiff, lhs, itau, ipord, ipred, lstres,
+     & iepstm, dtsfct, dtsfctsclr, taucfct, ibksiz,
+     & iabc, isurf, idflx, Bo, CoalInvSigma, presavg,
+     & EntropyPressure
+        common /inpdat/ epstol(8), Delt(MAXTS), CFLfl(MAXTS),
+     & CFLsl(MAXTS), nstep(MAXTS), niter(MAXTS),
+     & impl(MAXTS), rhoinf(MAXTS),
+     & LHSupd(6), loctim(MAXTS), deltol(MAXTS,2),
+     & CFLfl_max, iCFLfl_maxelem, iflag_cfl_dt,
+     & CFL_limit(2), timestart, CFLls_max, 
+     & iCFLls_maxelem, svLSFlag, CFLbuint_max,
+     & factor_buint, factor_CFLfl
+        common /mio/ iin, igeom, ipar, ibndc, imat, iecho,
+     & iout, ichmou, irstin, irstou, ihist, iflux,
+     & ierror, itable, iforce, igraph, itime, ivol,
+     & istat, ivhist
+        common /mioname/ fin, fgeom, fpar, fbndc, fmat, fecho,
+     & frstin, frstou, fhist, ferror, ftable, fforce,
+     & fgraph, ftime, fvol, fstat, fvhist
+        common /itrpar/ eGMRES, lGMRES, iKs, ntotGM
+        common /itrpnt/ mHBrg, meBrg, myBrg, mRcos, mRsin
+        common /matdat/ datmat(3,7,MAXTS), matflg(6,MAXTS),
+     & nummat, mexist
+        common /matramp/ tmu, trho, omu, orho, qrts0, qrts1, 
+     & iramp, nrts0, nrts1
+        common /mmatpar/ pr, Planck, Stefan, Nh, Rh, Rgas,
+     & gamma, gamma1, s0, xO2, xN2, Msh(5), h0sh(5), Trot(5), sigs(5),
+     & Tvib(5), g0s(5), dofs(5), Rs(5), h0s(5), cpsh(5), cps(5), cvs(5),
+     & s0sh(5)
+c     &, const,
+c     & yN2, yO2,
+c     & ithm
+        common /outpar/ ro, vel, temper, press, entrop, ntout,
+     & ioform, iowflux, iofieldv, iotype, ioybar
+        common /point/ mbeg, mend, mprec
+        common /precis/ epsM, iabres
+        common /propar/ npro
+        common /resdat/ resfrt
+        common /solpar/ imap, ivart, iDC, iPcond, Kspace, nGMRES,
+     & iconvflow, iconvsclr, idcsclr(2)
+        common /timdat/ time, CFLfld, CFLsld, Dtgl, Dtmax, alpha,
+     & etol, lstep, ifunc, itseq, istep, iter,
+     & nitr, almi, alfi, gami, flmpl, flmpr,
+     & dtol(2), iCFLworst
+        common /timpar/ LCtime, ntseq
+        common /incomp/ numeqns(100), minIters, maxIters, 
+     & iprjFlag, nPrjs, ipresPrjFlag, nPresPrjs,
+     & prestol, statsflow(6), statssclr(6),
+     & iverbose
+        common /mtimer1/ ccode(13)
+        common /mtimer2/ flops, gbytes, sbytes, iclock, icd, icode,
+     & icode2, icode3
+        common /timer3/ cpu(11), cpu0(11), nacess(11)
+        common /title / title, ititle
+        common /intdat/ intg(2,MAXTS), intpt(3), intptb(3)
+        common /nomodule/ shvebct, bcttimescale,
+     &  ValueListResist(0:MAXSURF), rhovw, thicknessvw, evw, rnuvw,
+     &  rshearconstantvw, betai, icardio, itvn, ipvsq, numResistSrfs, 
+     &  nsrflistResist(0:MAXSURF), numImpSrfs, nsrflistImp(0:MAXSURF),
+     &  impfile,
+     &  ideformwall, iwallmassfactor, iwallstiffactor,
+     &  tvbcswitch, ibcb_conv_p, ibcb_conv_p_norm, itvbc, iRBCT
+        common /pcboiling/ bubboil, solheat, bubgrow, h_fg, T_sat,
+     & epsilon_lst, breakup2w,
+     & breaksclr,
+     & delt_T(100), numshell_out(100), numshell_in(100),
+     & bubble_vol(100), bubble_tempG(100), bubbleID(100),
+     & numshell_out2(100)
+        common /contactangle/ CA_flag, theta_adv, theta_rec, Forcecont, 
+     & stretch, Fapp_thick, Fapp_heigh, CAramp,
+     & CAF_upper, CAF_interval, CA_startT, bubble_avgCA
+        common /sequence/ seqsize, stepseq(100)
+        common /amgvarr/ strong_eps, ramg_eps, ramg_relax, ramg_trunc 
+        common /amgvari/ irun_amg, irun_amg_sa, irun_amg_prec,
+     & iamg_verb,
+     & iamg_neg_sten, iamg_nlevel,
+     & iamg_c_solver,
+     & iamg_prescale, iamg_init,
+     & iamg_ppe_frez, iamg_setup_frez, iamg_iai_frez,
+     & iamg_interp, maxnev, maxncv, mlsdeg, iamg_scale, iamg_reduce
+
+! Arsen - why these are not in the common_c.h ???
+        common /intpt/ Qpt (MAXTOP ,4,MAXQPT), Qwt (MAXTOP ,MAXQPT), 
+     & Qptb(MAXTOP,4,MAXQPT), Qwtb(MAXTOP,MAXQPT), 
+     & nint(MAXTOP), nintb(MAXTOP),
+     & ngauss, ngaussb, intp, maxnint
+        common /blkdat/ lcblk(10,MAXBLK+1), lcblkb(10,MAXBLK+1)
+        common /mbndnod/ mnodeb(9,8,3)
+        common /melmcat/ mcsyst, melCat, nenCat(8,3), nfaCat(8,3)
+        common /mintpar/ indQpt(3,3,4), numQpt(3,3,4), intmax
+        common /msympar/ indsym(5,5)
 
 c
 c----------------------------------------------------------------------

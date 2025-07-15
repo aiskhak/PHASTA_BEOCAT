@@ -40,7 +40,10 @@ c
 !      use readarrays    !reads in uold and acold
       use redist_freeze !access to BC arrays if freezing value of primary LS vertices ! ???
       use fncorpmod ! Arsen
-      
+	  
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+
         include "common.h"
         include "mpif.h"
         include "auxmpi.h"
@@ -159,10 +162,12 @@ c
         integer ioldyhistst,    ioldyhisten,    indyhist
 !        logical ycf_old_log
 
-        real*8 avgxcoordf(coalest),     avgycoordf(coalest),
-     &         avgzcoordf(coalest),     avgxcoordold2(coalest),
-     &         avgycoordold2(coalest),  avgzcoordold2(coalest),
-     &         app_time(coalest,2)
+        real*8, allocatable, dimension (:) ::
+     & avgxcoordf, avgycoordf,
+     & avgzcoordf, avgxcoordold2,
+     & avgycoordold2, avgzcoordold2
+        real*8, allocatable, dimension (:,:) :: app_time
+	 
         real*8 itrtimestp
 !       For simulation steering
         integer inumstart
@@ -188,11 +193,34 @@ c
       real*8 sumtime
       logical ycf_old_log
       integer ixcf,iycf,izcf
-      real*8 sumxcf_o(i_num_bubbles), sumycf_o(i_num_bubbles)
       real*8 oldcf_dt,oldcf_dtlset,sumycf_old
       integer svLSFlag
 
-      real*8 :: sumzcf_o(i_num_bubbles)
+      integer(c_int) :: coalest
+      real(c_double) :: avgxcoordold(100)
+      real(c_double) :: avgycoordold(100)
+      real(c_double) :: avgzcoordold(100)
+	  integer(c_int) :: coalcon_rem(100)
+	  integer(c_int) :: i_num_bubbles
+      real(c_double) :: phvol(2)
+	  integer(c_int) :: iLSet
+	  
+      real*8 sumxcf_o(levlset%i_num_bubbles),
+     & sumycf_o(levlset%i_num_bubbles),
+     & sumzcf_o(levlset%i_num_bubbles)
+	  
+      coalest       = levlset%coalest
+      avgxcoordold  = levlset%avgxcoordold
+      avgycoordold  = levlset%avgycoordold
+      avgzcoordold  = levlset%avgzcoordold
+	  i_num_bubbles = levlset%i_num_bubbles
+      phvol         = levlset%phvol
+	  iLSet         = levlset%iLSet
+
+      allocate (avgxcoordf(coalest), avgycoordf(coalest),
+     & avgzcoordf(coalest), avgxcoordold2(coalest),
+     & avgycoordold2(coalest), avgzcoordold2(coalest))
+      allocate (app_time(coalest,2))
 
 !----------------------------------------------------------------------
 !!     Setting up memLS
@@ -213,13 +241,14 @@ c
 !       interface adjustment 
 !                                               Jun, March, 2014
 !----------------------------------------------------------------------
+        PRINT *, 'DEBUG [itrdrv] before any work, iLSet = ', iLSet
+        flush(0)
+		
         C_int_adjust    = 0.0d0
         vf_now          = 0.0d0
 !----------------------------------------------------------------------
 !       Open files for bubble analysis
 !----------------------------------------------------------------------
-         write (*,*) iLSet, "this is ilset !!!!!"
-         flush(0)
         if(iBT.eq.1 .and. iLSet .eq. 2) then
            if(myrank .eq. master) write(*,*) 'iBT is', iBT
 !       get the total number of bubbles in the entire domain (i_num_bubbles)

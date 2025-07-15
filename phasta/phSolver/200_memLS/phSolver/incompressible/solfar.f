@@ -131,9 +131,12 @@ c
       integer sparseloc 
 
 c!.... Matt Talley's Bubble Coal Control
-      real*8 avgxcoordf(coalest),
-     &avgycoordf(coalest), avgzcoordf(coalest)
+        real*8, dimension (100) :: avgxcoordf, 
+     &avgycoordf, avgzcoordf ! ??? hardcoded coalest
 
+!      if (.not.allocated(avgxcoordf)) allocate (avgxcoordf(coalest))
+!	  if (.not.allocated(avgycoordf)) allocate (avgycoordf(coalest))
+!	  if (.not.allocated(avgzcoordf)) allocate (avgzcoordf(coalest))
 c     
 c.... *******************>> Element Data Formation <<******************
 c

@@ -16,6 +16,9 @@ c
         use local_mass
         use spat_var_eps
         use timedata  ! for iblkts usage
+		
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
 c
         include "common.h"
         include "mpif.h"
@@ -23,23 +26,23 @@ c
         real*8 xarray(ibksiz), yarray(ibksiz), zarray(ibksiz)
         integer coordtag(ibksiz) !Passed arrays from e3ivar
 
-        real*8 avgxcoord, avgycoord, avgzcoord, avgvectdist, !Coalescence control center pt
-     &         avgxcoordf(coalest), avgycoordf(coalest),
-     &         avgzcoordf(coalest)
+        real*8 avgxcoord, avgycoord, avgzcoord, avgvectdist !Coalescence control center pt
+        real*8, allocatable, dimension (:) ::
+     & avgxcoordf, avgycoordf, avgzcoordf,
+     & totxcoordsum_mult, totycoordsum_mult,
+     & totzcoordsum_mult,
+     & xcoordsum_mult, ycoordsum_mult, zcoordsum_mult 
+        integer, allocatable, dimension (:) :: totcoordcount_mult, 
+     & totcoordnumb_mult, consol_tag, avgcoordf_erase_tag
+		real*8, allocatable, dimension (:,:) :: avgcoordfdist
 
-        real*8 totxcoordsum, totycoordsum, totzcoordsum, totvectdistsum,
-     &         totxcoordsum_mult(coalest), totycoordsum_mult(coalest),
-     &         totzcoordsum_mult(coalest) !Total sum of coordinates
+        real*8 totxcoordsum, totycoordsum, totzcoordsum, totvectdistsum !Total sum of coordinates
+        integer totcoordcount, totvectnumbsum !Total number or coordinates
 
-        integer totcoordcount, totvectnumbsum,
-     &          totcoordcount_mult(coalest) !Total number or coordinates
+        real*8 xcoordsum, ycoordsum, zcoordsum, vectdistsum !Sum from each processor
 
-        real*8 xcoordsum, ycoordsum, zcoordsum, vectdistsum, 
-     &         xcoordsum_mult(coalest), ycoordsum_mult(coalest),
-     &         zcoordsum_mult(coalest) !Sum from each processor
 
-        integer totcoordnumb, vectnumbsum, diffnumbsum,
-     &          totcoordnumb_mult(coalest) !Total number from each processor
+        integer totcoordnumb, vectnumbsum, diffnumbsum !Total number from each processor   
 
         real*8 globalxcoord(ibksiz,nelblk), globalycoord(ibksiz,nelblk),
      &         globalzcoord(ibksiz,nelblk), vectdist(ibksiz,nelblk),
@@ -53,7 +56,7 @@ c
 
         real*8 phi_max2, bubradius, bubradius2, length_bside_tri,
      &         angle1, angle2, hypot_len_1, hypot_len_2,
-     &         avgcoordfdist(coalest,coalest), phi_max(ibksiz)
+     &         phi_max(ibksiz)
 
         integer totcoordnumbarray(ibksiz,nelblk),
      &          vectnumb(ibksiz,nelblk)
@@ -63,8 +66,19 @@ c
      &          sign_of_vect_max_zcoord, sign_of_vect_max_xcoord_tmp,
      &          sign_of_vect_max_ycoord_tmp, sign_of_vect_max_zcoord_tmp
 
-        integer coalesc_tag(ibksiz,nelblk), consol_tag(coalest),
-     &          avgcoordf_erase_tag(coalest)
+        integer coalesc_tag(ibksiz,nelblk)
+
+      integer(c_int) :: coalest
+      coalest = levlset%coalest
+
+        allocate (avgxcoordf(coalest), avgycoordf(coalest),
+     & avgzcoordf(coalest), totxcoordsum_mult(coalest), 
+     & totycoordsum_mult(coalest),
+     & totzcoordsum_mult(coalest), totcoordcount_mult(coalest),
+     & xcoordsum_mult(coalest), ycoordsum_mult(coalest), 
+     & zcoordsum_mult(coalest), totcoordnumb_mult(coalest),
+     & avgcoordfdist(coalest,coalest),
+     & consol_tag(coalest), avgcoordf_erase_tag(coalest))
 
 c Initialize bubble coalecence control variables
 

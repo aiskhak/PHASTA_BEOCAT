@@ -66,6 +66,9 @@ c
       use  spat_var_eps ! for spatially varying epsilon_ls
 c      use  bub_track
 
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+		
       include "common.h"
 c
 c!  passed arrays
@@ -107,8 +110,8 @@ c
 	real*8    A11, B11  ! Wall repellant force now depends upon the Weber number, Igor, April 2010
 
         real*8    xarray(ibksiz), yarray(ibksiz), zarray(ibksiz) ! Matt Talley: Coalesc. Control
-        real*8    bubradius, bubradius2, PtsPerDiam, Curvlim, Curvsel,
-     &            appvolume(ibksiz,nenl,coalest) ! Matt Talley: Coalesc. Control
+        real*8    bubradius, bubradius2, PtsPerDiam, Curvlim, Curvsel
+        real*8, allocatable, dimension (:,:,:) :: appvolume ! Matt Talley: Coalesc. Control
         integer   coordtag(ibksiz) ! Matt Talley: Coalesc. Control
 
         real*8    xxtmp(nsd), Wetmp !Jun Fang: Coal Ctrl
@@ -149,8 +152,20 @@ c
         real*8 wnrm_new(3)
         real*8, dimension(npro):: site_loct
 !        real*8, dimension(npro):: site_1, site_2 !Anna 
- 
 
+      integer(c_int) :: coalest
+      real(c_double) :: avgxcoordold(100)
+      real(c_double) :: avgycoordold(100)
+      real(c_double) :: avgzcoordold(100)
+	  integer(c_int) :: coalcon_rem(100)
+	  
+      coalest       = levlset%coalest
+      avgxcoordold  = levlset%avgxcoordold
+      avgycoordold  = levlset%avgycoordold
+      avgzcoordold  = levlset%avgzcoordold
+
+      if (.not.allocated(appvolume)) 
+     &allocate(appvolume(ibksiz,nenl,100)) ! hardcoded coalest ???
 
 c... Contact Angle Mengnan
 ! -----------------------------------------------------------------------
@@ -179,7 +194,7 @@ c... Contact Angle Mengnan
 !           stretch= 100 !1.0
            flag=1
 !           theta_adv=40.0  !90.0
-!           theta_rec=40.0 !90.0
+!           theta_rec=40.0 !90.
            velmodel=1 !decide which vel model 1: Sine interpolation, 2: Linear
 !3: Step
 !###   Implementaiton of dynamic contact angle
