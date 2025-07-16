@@ -69,27 +69,15 @@ export LDFLAGS="-g -L${MPICH_LIB} -qopenmp -Wl,-rpath,${MPICH_LIB} -L${SIMLIB_DI
 # uncomment line below to clean build
 #isclean="clean"
 
-# ─────────────────────────────────────────────
-# MANUALLY BUILD levlset_mod.f90 → levlset_mod.o + levlset_mod.mod
-# ─────────────────────────────────────────────
-(
-  cd "$DEVROOT/phasta/phSolver/200_memLS/phSolver/common"
-
-  echo ">>> compiling levlset_mod.f90 by hand…"
-
-  # invoke the compiler (ifx) via the FC env var, with your FFLAGS
-  $FC $FFLAGS \
-     -I. \
-     -c levlset_mod.f90 \
-     -o obj/x86_64_linux-IB-intelmpi/levlset_mod.o
-
-  # check we got a .mod
-  if [[ ! -f levlset_mod.mod ]]; then
-    echo "ERROR: levlset_mod.mod not found!"
-    exit 1
-  fi
+# ───────────────────────────────
+# MANUALLY BUILD COMMON VARIABLES
+#    levlset_mod.f90
+# ───────────────────────────────
+(cd "$DEVROOT/phasta/phSolver/200_memLS/phSolver/common"
+echo ">>> compiling levlset_mod.f90 by hand…"
+$FC $FFLAGS -I. -c levlset_mod.f90 -o obj/x86_64_linux-IB-intelmpi/levlset_mod.o
 )
-# ─────────────────────────────────────────────
+# ───────────────────────────────
 
 setup="gmake -j32 VERS=dbg BUILD=debug NODEP=1 setup"
 compile="gmake -j32 VERS=dbg BUILD=debug VERSION=200_memLS NODEP=1 NOSHARED=1 $isclean"

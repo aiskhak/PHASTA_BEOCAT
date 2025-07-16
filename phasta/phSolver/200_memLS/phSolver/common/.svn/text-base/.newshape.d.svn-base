@@ -1,9 +1,0 @@
-obj/x86_64_linux-pgi-O/newshape.o : newshape.cc \
-  /usr/lib64/gcc/x86_64-suse-linux/4.1.2/include/float.h \
-  /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
-  /usr/include/gnu/stubs.h /usr/include/bits/wordsize.h \
-  /usr/include/gnu/stubs-64.h /usr/include/bits/huge_val.h \
-  /usr/include/endian.h /usr/include/bits/endian.h \
-  /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h \
-  /usr/include/bits/mathcalls.h /usr/include/bits/mathcalls.h \
-  topo_shapedefs.h 

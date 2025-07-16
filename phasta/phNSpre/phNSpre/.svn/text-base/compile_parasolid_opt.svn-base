@@ -1,4 +1,0 @@
-gmake MODELER=parasolid VERS=opt clean
-gmake MODELER=parasolid VERS=opt setup
-gmake MODELER=parasolid VERS=opt 
-

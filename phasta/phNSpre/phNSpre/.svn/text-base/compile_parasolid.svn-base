@@ -1,4 +1,0 @@
-gmake MODELER=parasolid clean
-gmake MODELER=parasolid setup
-gmake MODELER=parasolid 
-

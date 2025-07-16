@@ -1,7 +1,0 @@
-gmake MODELER=discrete clean
-gmake MODELER=discrete setup
-gmake MODELER=discrete 
-gmake MODELER=discrete VERS=opt clean
-gmake MODELER=discrete VERS=opt setup
-gmake MODELER=discrete VERS=opt
-

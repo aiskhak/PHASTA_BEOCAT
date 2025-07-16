@@ -1,1 +1,0 @@
-ifort -o bubbles_pipe.exe bubbles_pipe.f
