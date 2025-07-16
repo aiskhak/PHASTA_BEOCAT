@@ -67,7 +67,7 @@ export INCLUDES="-I${PHASTA_INCLUDE_DIR} -I${MPICH_INC} -I${SIMMODELER_ROOT}/inc
 export LDFLAGS="-g -L${MPICH_LIB} -qopenmp -Wl,-rpath,${MPICH_LIB} -L${SIMLIB_DIR} -Wl,-rpath,${SIMLIB_DIR} -L${PSDK_LIB} -Wl,-rpath,${PSDK_LIB} -lpskernel -lSimLicense -ltirpc ${LDFLAGS}"
 
 # uncomment line below to clean build
-#isclean="clean"
+isclean="clean"
 
 # ───────────────────────────────
 # MANUALLY BUILD COMMON VARIABLES
