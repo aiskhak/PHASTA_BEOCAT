@@ -6,6 +6,10 @@ c This subroutine calculates and updates the aerodynamic forces
 c
 c----------------------------------------------------------------------
 c
+
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+
       include "common.h"
       include "mpif.h"
       include "auxmpi.h"
@@ -20,6 +24,10 @@ c
 c  START OF DISTURBANCE BLOCK
 c
       dimension diste(1), distesum(1)
+	  
+	  integer(c_int) :: iLSet
+	  iLSet         = levlset%iLSet
+	  
       distcalc=0  ! we would want to activate this for T-S instability studies
       if(distcalc.eq.1) then
         if(iter.eq.nitr) then  ! we have completed the last iteration

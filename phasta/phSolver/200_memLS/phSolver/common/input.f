@@ -9,6 +9,10 @@ c Farzin Shakib, Winter 1987.
 c Zdenek Johan,  Winter 1991.  (Fortran 90)
 c----------------------------------------------------------------------
 c
+
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+
         include "common.h"
         include "mpif.h"
 
@@ -21,6 +25,9 @@ c
 ! Arsen
         real :: rxinlt = 0.0, rxrecy = 0.0
         real :: xlngth = 0.0, ylngth = 0.0, zlngth = 0.0
+		
+	  integer(c_int) :: iLSet
+	  iLSet         = levlset%iLSet
 
 c assigned in phasta.cc
 c        numpe=npe

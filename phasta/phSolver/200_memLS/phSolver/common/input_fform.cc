@@ -196,7 +196,7 @@ int input_fform(char inpfname[])
     if (turbvari.iles*turbvari.irans!=0) turbvar.eles=
                                            inp.GetValue("DES Edge Length");
 
-    int solflow, solheat , solscalr, ilset, buintcfl, coalcon, coaltimtrak, coalest, iBT, iFT,icoalCtrl;
+    int solflow, solheat , solscalr, ilset_loc, buintcfl, coalcon, coaltimtrak, coalest, iBT, iFT,icoalCtrl;
     ((string)inp.GetValue("Solve Flow") == "True")? solflow=1:solflow=0;
     ((string)inp.GetValue("Solve Heat") == "True")? 
     pcboiling.solheat=1.0:pcboiling.solheat=0.0;
@@ -211,9 +211,9 @@ int input_fform(char inpfname[])
     levlset.icoalCtrl=0;
     //for compressible solheat= False so
     if((string)inp.GetValue("Equation of State") == "Compressible") pcboiling.solheat=0.0;
-    ilset = (int)inp.GetValue("Solve Level Set");
+    ilset_loc = (int)inp.GetValue("Solve Level Set");
     solscalr = (int)inp.GetValue("Solve Scalars");
-    solscalr += ilset;
+    solscalr += ilset_loc;
     if(turbvari.irans == -1) solscalr++;
     if(turbvari.irans == -2) solscalr=solscalr+2;
     if ( solscalr > 4 ) {
@@ -223,14 +223,14 @@ int input_fform(char inpfname[])
     }
     inpdat.impl[0] = 10*solflow+solscalr*100+pcboiling.solheat;
 
-    levlset.iLSet = ilset;
+    levlset.iLSet = ilset_loc;
 printf(
-  "DEBUG [input_fform] parsed ilset=%d, levlset.iLSet=%d, address=%p\n",
-  ilset,
+  "DEBUG [input_fform UPDATED] parsed ilset_loc=%d, levlset.iLSet=%d, address=%p\n",
+  ilset_loc,
   levlset.iLSet,
   (void*)&levlset.iLSet
 );
-    if( ilset > 0) {
+    if( ilset_loc > 0) {
     levlset.epsilon_ls = inp.GetValue("Number of Elements Across Interface");
     levlset.epsilon_lsd = inp.GetValue("Number of Elements Across Interface for Redistancing");
     levlset.dtlset = inp.GetValue("Pseudo Time step for Redistancing");

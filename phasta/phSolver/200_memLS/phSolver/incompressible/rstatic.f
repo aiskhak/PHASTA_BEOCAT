@@ -183,6 +183,10 @@ c This subroutine calculates the statistics of the residual
 c
 c----------------------------------------------------------------------
 c
+
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+
         include "common.h"
         include "mpif.h"
         include "auxmpi.h"
@@ -194,6 +198,10 @@ c
         real*8 CFL_max_tmp
         integer iCFL_maxelem_tmp
 c        integer tmrc
+
+	  integer(c_int) :: iLSet
+	  iLSet         = levlset%iLSet
+
 c
 c.... compute max delta y
 c

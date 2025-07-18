@@ -44,6 +44,10 @@ c Frederic Chalot, Summer 1990.
 c Zdenek Johan,    Winter 1991.  (Fortran 90)
 c-----------------------------------------------------------------------
 c
+
+		use iso_c_binding, only: c_double, c_int
+		use levlset_mod, only: levlset
+
         include "common.h"
 c
         dimension pres(npro),                Sclr(npro),
@@ -58,6 +62,9 @@ c
 c
         dimension Texp1(npro),               Texp2(npro)
         real*8 prop_blend(npro),test_it(npro)
+		
+	  integer(c_int) :: iLSet
+	  iLSet         = levlset%iLSet
 
 c       ttim(27) = ttim(27) - secs(0.0)
 c
